@@ -8,9 +8,9 @@ import (
 	"github.com/kollalabs/sdk-go/kc/swagger"
 )
 
-// These are integratino tests that require a valid API key to be set
+// These are integration tests that require a valid API key to be set
 // in the environment variable KC_API_KEY
-func TestClient_GetConsumerToken(t *testing.T) {
+func TestClient_ConsumerToken(t *testing.T) {
 
 	// Get API key from environment variable
 	apiKey := os.Getenv("KC_API_KEY")
@@ -42,13 +42,13 @@ func TestClient_GetConsumerToken(t *testing.T) {
 				APIKey:        tt.fields.APIKey,
 				OpenAPIClient: tt.fields.OpenAPIClient,
 			}
-			got, err := c.GetConsumerToken(tt.args.ctx, tt.args.consumerID, tt.args.consumerName)
+			got, err := c.ConsumerToken(tt.args.ctx, tt.args.consumerID, tt.args.consumerName)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Client.GetConsumerToken() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Client.ConsumerToken() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if got != tt.want {
-				t.Errorf("Client.GetConsumerToken() = %v, want %v", got, tt.want)
+				t.Errorf("Client.ConsumerToken() = %v, want %v", got, tt.want)
 			}
 		})
 	}
