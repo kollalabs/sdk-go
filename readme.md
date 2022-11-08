@@ -66,7 +66,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	//creds.LinkedAccount.AuthData
+
 	slackapi := slack.New(creds.Token)
 	_, _, err = slackapi.PostMessage("general", slack.MsgOptionText("Hello world! (Send with Kolla managed token)", false))
 	if err != nil {
