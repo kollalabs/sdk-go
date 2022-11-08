@@ -15,26 +15,29 @@ authentication and credentials for you, so you can focus on your business logic.
 package main
 
 import (
-	"context"
-	"os"
+  "context"
+  "log"
+  "os"
 
-	"github.com/kollalabs/sdk-go/kc"
+  "github.com/kollalabs/sdk-go/kc"
 )
 
 func main() {
-	// Get api key from environment variable
-	apiKey := os.Getenv("KC_API_KEY")
+  // Get api key from environment variable
+  apiKey := os.Getenv("KC_API_KEY")
+  ctx := context.Background()
 
-	// Create a new client
-	kolla := kc.New(apiKey)
-
-	// Get consumer token
-	ctx := context.Background()
-	consumerToken, err := kolla.GetConsumerToken(ctx, "CONSUMER_ID", "CONSUMER_NAME")
-	if err != nil {
-		panic(err)
-	}
-	println(consumerToken)
+  // Create a new client
+  kolla, err := kc.New(apiKey)
+  if err != nil {
+    log.Fatalf("unable to load kolla connect client: %s\n", err)
+  }
+  // Get consumer token
+  consumerToken, err := kolla.ConsumerToken(ctx, "CONSUMER_ID", "CONSUMER_NAME")
+  if err != nil {
+    log.Fatalf("unable to load consumer token: %s\n", err)
+  }
+  log.Println(consumerToken)
 }
 ```
 
@@ -48,32 +51,34 @@ Here is an example of getting a customer's Slack API token and calling the Slack
 package main
 
 import (
-	"context"
-	"os"
+  "context"
+  "log"
+  "os"
 
-	"github.com/kollalabs/sdk-go/kc"
-	"github.com/slack-go/slack"
+  "github.com/kollalabs/sdk-go/kc"
+  "github.com/slack-go/slack"
 )
 
 func main() {
-	// Get api key from environment variable
-	apiKey := os.Getenv("KC_API_KEY")
-	// Create a new client
-	kolla := kc.New(apiKey)
+  // Get api key from environment variable
+  apiKey := os.Getenv("KC_API_KEY")
+  ctx := context.Background()
 
-	ctx := context.Background()
-	creds, err := kolla.GetCredentials(ctx, "slack", "CONSUMER_ID") // Use consumer ID set in consumer token
-	if err != nil {
-		panic(err)
-	}
+  // Create a new client
+  kolla, err := kc.New(apiKey)
+  if err != nil {
+    log.Fatalf("unable to load kolla connect client: %s\n", err)
+  }
 
-	slackapi := slack.New(creds.Token)
-	_, _, err = slackapi.PostMessage("general", slack.MsgOptionText("Hello world! (Send with Kolla managed token)", false))
-	if err != nil {
-		panic(err)
-	}
+  creds, err := kolla.Credentials(ctx, "slack", "CONSUMER_ID") // Use consumer ID set in consumer token
+  if err != nil {
+    log.Fatalf("unable to load consumer credentials: %s\n", err)
+  }
+
+  slackapi := slack.New(creds.Token)
+  _, _, err = slackapi.PostMessage("general", slack.MsgOptionText("Hello world! (Send with Kolla managed token)", false))
+  if err != nil {
+    log.Fatalf("unable to post slack message: %s\n", err)
+  }
 }
 ```
-
-
-
