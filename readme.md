@@ -62,7 +62,7 @@ func main() {
 	kolla := kc.New(apiKey)
 
 	ctx := context.Background()
-	creds, err := kolla.GetCredentials(ctx, "slack", "customer-id-kolla")
+	creds, err := kolla.GetCredentials(ctx, "slack", "CONSUMER_ID") // Use consumer ID set in consumer token
 	if err != nil {
 		panic(err)
 	}
