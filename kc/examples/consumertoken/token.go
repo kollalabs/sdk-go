@@ -23,7 +23,7 @@ func main() {
 
 	// Get consumer token
 	ctx := context.Background()
-	consumerToken, err := kolla.GetConsumerToken(ctx, "CONSUMER_ID", "CONSUMER_NAME")
+	consumerToken, err := kolla.ConsumerToken(ctx, "CONSUMER_ID", "CONSUMER_NAME")
 	if err != nil {
 		log.Fatalf("unable to get consumer token: %s\n", err)
 	}

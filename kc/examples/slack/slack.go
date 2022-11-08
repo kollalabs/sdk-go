@@ -24,7 +24,7 @@ func main() {
 		log.Fatalf("unable to create kolla connect client: %s\n", err)
 	}
 
-	creds, err := kolla.GetCredentials(ctx, "slack", "customer-id-kolla")
+	creds, err := kolla.Credentials(ctx, "slack", "customer-id-kolla")
 	if err != nil {
 		log.Fatalf("unable to load credentials %s\n", err)
 	}
