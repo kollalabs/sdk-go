@@ -7,9 +7,9 @@ authentication and credentials for you, so you can focus on your business logic.
 
 ## Usage
 
-### getConsumerToken
+### Get a Consumer Token
 
-`getConsumerToken` takes a `consumer_id` and `consumer_name` and generates a `consumer_token` for use in the front-end web SDK. (see [Installing KollaConnect](https://docs.getkolla.com/kolla/getting-started/installing-kollaconnect) for more info)
+`ConsumerToken` takes a `consumer_id` and `consumer_name` and generates a `consumer_token` for use in the front-end web SDK. (see [Installing KollaConnect](https://docs.getkolla.com/kolla/getting-started/installing-kollaconnect) for more info)
 
 ```go
 package main
@@ -41,9 +41,9 @@ func main() {
 }
 ```
 
-### getCredentials
+### Get Customer Credentials
 
-`getCredentials` returns the credentials for your customers' software integrations. Behind the scenes Kolla manages OAuth2 negotiation and token refreshing so you can simply get your token and get going. It accepts a `connectorID` and a `consumerID`, which was set when creating the consumerToken. (see [Installing KollaConnect](https://docs.getkolla.com/kolla/getting-started/installing-kollaconnect) for more info)
+`Credentials` returns the credentials for your customers' software integrations. Behind the scenes Kolla manages OAuth2 negotiation and token refreshing so you can simply get your token and get going. It accepts a `connectorID` and a `consumerID`, which was set when creating the consumerToken. (see [Installing KollaConnect](https://docs.getkolla.com/kolla/getting-started/installing-kollaconnect) for more info)
 
 Here is an example of getting a customer's Slack API token and calling the Slack API with the Slack Go SDK:
 
