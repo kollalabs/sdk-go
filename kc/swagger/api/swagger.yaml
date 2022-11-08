@@ -1,0 +1,1218 @@
+openapi: 3.0.3
+info:
+  title: Connect API
+  description: Service for interacting with Connection Manager resources
+  version: v1
+servers:
+- url: /
+tags:
+- name: Connect
+paths:
+  /v1/connectors:
+    get:
+      tags:
+      - Connect
+      summary: List Connectors
+      description: Lists connectors
+      operationId: Connect_ListConnectors
+      parameters:
+      - name: page_size
+        in: query
+        description: "The maximum number of apis to return. The service may return\
+          \ fewer than this value. If unspecified, at most 50 will be returned. The\
+          \ maximum value is 1000; values above 1000 will be coerced to 1000."
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+          format: int32
+      - name: page_token
+        in: query
+        description: "A page token, received from a previous list call. Provide this\
+          \ to retrieve the subsequent page. When paginating, all other parameters\
+          \ provided to `ListConnectors` must match the call that provided the page\
+          \ token."
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: order_by
+        in: query
+        description: Order By Parameter
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: filter
+        in: query
+        description: Filter parameter- See https://aip.kolla.dev/160 for more info
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListConnectorsResponse'
+        default:
+          description: Default error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+    post:
+      tags:
+      - Connect
+      summary: Create connector
+      description: Creates a new connector
+      operationId: Connect_CreateConnector
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Connector'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Connector'
+        default:
+          description: Default error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+  /v1/connectors/{connector}:
+    get:
+      tags:
+      - Connect
+      summary: Get Connector
+      description: This gets a connector
+      operationId: Connect_GetConnector
+      parameters:
+      - name: connector
+        in: path
+        description: The connector id.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Connector'
+        default:
+          description: Default error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+    patch:
+      tags:
+      - Connect
+      summary: Update Connector
+      description: Update a connector
+      operationId: Connect_UpdateConnector
+      parameters:
+      - name: connector
+        in: path
+        description: The connector id.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: update_mask
+        in: query
+        description: The list of fields to update.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: field-mask
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Connector'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Connector'
+        default:
+          description: Default error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+  /v1/connectors/{connector}/linkedaccounts:
+    get:
+      tags:
+      - Connect
+      summary: List LinkedAccounts
+      description: This gets a list of linked accounts.
+      operationId: Connect_ListLinkedAccounts
+      parameters:
+      - name: connector
+        in: path
+        description: The connector id.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: page_size
+        in: query
+        description: "The maximum number of items to return. The service may return\
+          \ fewer than this value. If unspecified, at most 50 will be returned. The\
+          \ maximum value is 1000; values above 1000 will be coerced to 1000."
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          format: int32
+      - name: page_token
+        in: query
+        description: "A page token, received from a previous list call. Provide this\
+          \ to retrieve the subsequent page. When paginating, all other parameters\
+          \ provided to `ListConnectors` must match the call that provided the page\
+          \ token."
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: order_by
+        in: query
+        description: Order By Parameter
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: filter
+        in: query
+        description: Filter parameter- See https://aip.kolla.dev/160 for more info
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListLinkedAccountsResponse'
+        default:
+          description: Default error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+    post:
+      tags:
+      - Connect
+      summary: Create LinkedAccount
+      description: Creates a new LinkedAccount
+      operationId: Connect_CreateLinkedAccount
+      parameters:
+      - name: connector
+        in: path
+        description: The connector id.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LinkedAccount'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkedAccount'
+        default:
+          description: Default error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+  /v1/connectors/{connector}/linkedaccounts/{linkedaccount}:
+    get:
+      tags:
+      - Connect
+      summary: Get LinkedAccount
+      description: This gets a LinkedAccount.
+      operationId: Connect_GetLinkedAccount
+      parameters:
+      - name: connector
+        in: path
+        description: The connector id.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: linkedaccount
+        in: path
+        description: The linkedaccount id.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkedAccount'
+        default:
+          description: Default error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+  /v1/connectors/{connector}/linkedaccounts/{linkedaccount}/linkedaccountlogs:
+    get:
+      tags:
+      - Connect
+      summary: ListLinkedAccountLogs
+      description: Retrieve the logs for a given LinkedAccount
+      operationId: Connect_ListLinkedAccountLogs
+      parameters:
+      - name: connector
+        in: path
+        description: The connector id.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: linkedaccount
+        in: path
+        description: The linkedaccount id.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: page_size
+        in: query
+        description: "The maximum number of apis to return. The service may return\
+          \ fewer than this value. If unspecified, at most 50 will be returned. The\
+          \ maximum value is 1000; values above 1000 will be coerced to 1000."
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+          format: int32
+      - name: page_token
+        in: query
+        description: "A page token, received from a previous list call. Provide this\
+          \ to retrieve the subsequent page. When paginating, all other parameters\
+          \ provided to `ListConnectors` must match the call that provided the page\
+          \ token."
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: filter
+        in: query
+        description: "Filter parameter, no filters currently supported"
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListLinkedAccountLogsResponse'
+        default:
+          description: Default error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+  /v1/connectors/{connector}/linkedaccounts/{linkedaccount}:disable:
+    post:
+      tags:
+      - Connect
+      summary: DisableLinkedAccount
+      description: Disable a linked account (used when disconnecting by a consumer)
+      operationId: Connect_DisableLinkedAccount
+      parameters:
+      - name: connector
+        in: path
+        description: The connector id.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: linkedaccount
+        in: path
+        description: The linkedaccount id.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DisableLinkedAccountRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkedAccount'
+        default:
+          description: Default error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+  /v1/connectors/{connector}/linkedaccounts/{linkedaccount}:linkedAccountCredentials:
+    post:
+      tags:
+      - Connect
+      summary: LinkedAccount Credentials
+      description: |-
+        Returns the current auth credentials and expiry time
+         for a given LinkedAccount, to use consumer_id in place of the linked_account_id,
+         the linked_account_id in the url path should be a `-`
+         and the consumer_id specified in the request body
+         {connector} can be either the connector id or slug
+         /v1/{linked_account=connectors/{connector}/linkedaccounts/-}:linkedAccountCredentials
+      operationId: Connect_LinkedAccountCredentials
+      parameters:
+      - name: connector
+        in: path
+        description: The connector id.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: linkedaccount
+        in: path
+        description: The linkedaccount id.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LinkedAccountCredentialsRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkedAccountCredentialsResponse'
+        default:
+          description: Default error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+  /v1/consumers:consumerToken:
+    post:
+      tags:
+      - Connect
+      summary: Consumer Token
+      description: |-
+        Returns a short lived access token that a consumer can use to access the
+         API
+      operationId: Connect_ConsumerToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConsumerTokenRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsumerTokenResponse'
+        default:
+          description: Default error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+components:
+  schemas:
+    Connector:
+      type: object
+      properties:
+        name:
+          pattern: "^connectors/[a-z2-7]{26}$"
+          type: string
+          description: Resource name of the connector
+          readOnly: true
+        uid:
+          type: string
+          description: The system ID of the resource
+          readOnly: true
+        slug:
+          maxLength: 25
+          minLength: 4
+          pattern: "^[a-z90-9\\-\\_]{4,25}$"
+          type: string
+          description: Short name that can be used to identify the connector in place
+            of using the ID
+        marketplace_app:
+          pattern: "^apps/[a-z2-7]{26}/revisions/[a-z2-7]{26}$"
+          type: string
+          description: reference to the marketplace app that this connector is associated
+            with
+        auth_type:
+          type: string
+          description: auth type for the connector
+          format: enum
+          enum:
+          - OAUTH2
+          - API_KEY
+          - BASIC_AUTH
+          - SESSION
+          - JWT
+          - CUSTOM
+        oauth2_config:
+          $ref: '#/components/schemas/Connector_Oauth2Config'
+        api_key_config:
+          $ref: '#/components/schemas/Connector_ApiKeyConfig'
+        create_time:
+          type: string
+          description: "Timestamps. See: https://aip.kolla.dev/kolla/9001 create time"
+          format: date-time
+          readOnly: true
+        update_time:
+          type: string
+          description: time of last update
+          format: date-time
+          readOnly: true
+      description: A representation of a Connector
+      example:
+        api_key_config:
+          parameter_field: parameter_field
+          consumer_config_key: consumer_config_key
+          prefix: prefix
+          header: true
+        uid: uid
+        auth_type: OAUTH2
+        update_time: 2000-01-23T04:56:07.000+00:00
+        create_time: 2000-01-23T04:56:07.000+00:00
+        marketplace_app: marketplace_app
+        oauth2_config:
+          extra_token_uri_params:
+            key: extra_token_uri_params
+          token_uri: token_uri
+          extra_authorization_uri_params:
+            key: extra_authorization_uri_params
+          authorization_uri: authorization_uri
+          revocation_uri: http://example.com/aeiou
+          client_secret: client_secret
+          redirect_uri: http://example.com/aeiou
+          scopes:
+          - scopes
+          - scopes
+          - scopes
+          - scopes
+          - scopes
+          - scopes
+          - scopes
+          - scopes
+          - scopes
+          - scopes
+          client_id: client_id
+        name: name
+        slug: slug
+    Connector_ApiKeyConfig:
+      type: object
+      properties:
+        consumer_config_key:
+          maxLength: 50
+          type: string
+          description: "The key from the key-value pair in the consumer config that\
+            \ maps to the API key example: consumer_config.api_key"
+        parameter_field:
+          maxLength: 50
+          type: string
+          description: Name of the query parameter field or header for the API key
+        header:
+          type: boolean
+          description: whether the API key is in the query parameter or header
+        prefix:
+          maxLength: 500
+          type: string
+          description: "Prefix that should be added to the API key, sometimes 'Bearer\
+            \ ' is used as a prefix in authorization headers"
+      description: API Key Config message
+      example:
+        parameter_field: parameter_field
+        consumer_config_key: consumer_config_key
+        prefix: prefix
+        header: true
+    Connector_Oauth2Config:
+      type: object
+      properties:
+        client_id:
+          maxLength: 500
+          type: string
+          description: oauth2 client id
+        client_secret:
+          maxLength: 500
+          type: string
+          description: oauth2 client secret
+        redirect_uri:
+          maxLength: 500
+          type: string
+          description: "oauth2 redirect uri, this should be left blank to have Kolla\
+            \ Connect manage the auth code and resulting credentials"
+          format: uri
+        authorization_uri:
+          maxLength: 500
+          type: string
+          description: oauth2 authorization uri
+        token_uri:
+          maxLength: 500
+          type: string
+          description: oauth2 token uri
+        revocation_uri:
+          maxLength: 500
+          type: string
+          description: oauth2 token revocation uri
+          format: uri
+        scopes:
+          maxItems: 100
+          type: array
+          description: oauth2 scopes
+          items:
+            maxLength: 100
+            type: string
+        extra_authorization_uri_params:
+          type: object
+          additionalProperties:
+            type: string
+          description: Extra authorization_uri parameters
+        extra_token_uri_params:
+          type: object
+          additionalProperties:
+            type: string
+          description: Extra token_uri parameters
+      description: Oauth2 config message
+      example:
+        extra_token_uri_params:
+          key: extra_token_uri_params
+        token_uri: token_uri
+        extra_authorization_uri_params:
+          key: extra_authorization_uri_params
+        authorization_uri: authorization_uri
+        revocation_uri: http://example.com/aeiou
+        client_secret: client_secret
+        redirect_uri: http://example.com/aeiou
+        scopes:
+        - scopes
+        - scopes
+        - scopes
+        - scopes
+        - scopes
+        - scopes
+        - scopes
+        - scopes
+        - scopes
+        - scopes
+        client_id: client_id
+    ConsumerTokenRequest:
+      type: object
+      properties:
+        consumer_id:
+          type: string
+          description: "id that links back to the consumer, can be a user_id, tenant_id,\
+            \ machine_id, etc"
+        metadata:
+          $ref: '#/components/schemas/ConsumerTokenRequest_ConsumerMetadata'
+      description: Request for a consumer token
+    ConsumerTokenRequest_ConsumerMetadata:
+      type: object
+      properties:
+        username:
+          type: string
+          description: username of the consumer
+        email:
+          type: string
+          description: email of the consumer
+        tenant_id:
+          type: string
+          description: tenant_id of the consumer
+        tenant_display_name:
+          type: string
+          description: tenant_display_name of the consumer
+      description: consumer metadata
+    ConsumerTokenResponse:
+      type: object
+      properties:
+        name:
+          pattern: ^linkedaccountcredentials/*$
+          type: string
+          description: name of the token
+        token:
+          type: string
+          description: access token that the consumer can user
+        expiry_time:
+          type: string
+          description: expiration time of the consumer token
+          format: date-time
+      description: Response for a consumer token
+      example:
+        name: name
+        expiry_time: 2000-01-23T04:56:07.000+00:00
+        token: token
+    DisableLinkedAccountRequest:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: "The name of the linked account to disable Format: connectors/{connector}/linkedaccounts/{linkedaccount}"
+      description: Request to disable linked account
+    GoogleProtobufAny:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: The type of the serialized message.
+      additionalProperties: true
+      description: Contains an arbitrary serialized message along with a @type that
+        describes the type of the serialized message.
+      x-schema-name: GoogleProtobufAny
+    LinkedAccount:
+      type: object
+      properties:
+        name:
+          pattern: "^connectors/[a-z2-7]{26}/linkedaccounts/[a-z2-7]{26}$"
+          type: string
+          description: Resource name of the connector
+          readOnly: true
+        uid:
+          type: string
+          description: The system ID of the resource
+          readOnly: true
+        consumer_id:
+          maxLength: 100
+          type: string
+          description: The consumer that the LinkedAccount belongs to
+        install_uri:
+          type: string
+          description: Install URL that the end user can use to install the connector
+            The install_uri is only set if the user has not yet completed the install.
+          readOnly: true
+        state:
+          type: string
+          description: current state of the LinkedAccount
+          format: enum
+          readOnly: true
+          enum:
+          - INITIALIZED
+          - ACTIVE
+          - FAILED
+          - DISABLED
+        state_message:
+          type: string
+          description: A user displayable message about the linked_account state
+          readOnly: true
+        credentials:
+          type: object
+          additionalProperties:
+            type: string
+          description: "Current credentials for the linked account, only needs to\
+            \ be supplied if migrating existing credentials into Kolla. Credentials\
+            \ can only be accessed through the LinkedAccountCredentials endpoint"
+          writeOnly: true
+        auth_state:
+          type: string
+          description: "current state of the embedded credentials, can be used to\
+            \ determine if the user needs to re-auth before the credentials expire\
+            \ or need to be manually refreshed, typically a sub-state of the state\
+            \ field"
+          format: enum
+          readOnly: true
+          enum:
+          - UNAVAILABLE
+          - VALID
+          - REAUTH_REQUIRED
+          - EXPIRING
+          - INVALID
+        auth_state_description:
+          type: string
+          description: A user displayable message about the auth state
+          readOnly: true
+        linked_account_scopes:
+          maxItems: 100
+          type: array
+          description: "Scopes associated with the linked account credentials, only\
+            \ needs to be provided if migrating credentials into Kolla"
+          items:
+            maxLength: 100
+            type: string
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+          description: Labels associated with the linked account
+        consumer_config_values:
+          type: object
+          additionalProperties:
+            type: string
+          description: Configuration values provided by the consumer
+        create_time:
+          type: string
+          description: "Timestamps. See: https://aip.kolla.dev/kolla/9001 create time"
+          format: date-time
+          readOnly: true
+        update_time:
+          type: string
+          description: time of last update
+          format: date-time
+          readOnly: true
+      description: LinkedAccount to a connector
+      example:
+        install_uri: install_uri
+        create_time: 2000-01-23T04:56:07.000+00:00
+        credentials:
+          key: credentials
+        auth_state: UNAVAILABLE
+        labels:
+          key: labels
+        uid: uid
+        consumer_id: consumer_id
+        consumer_config_values:
+          key: consumer_config_values
+        update_time: 2000-01-23T04:56:07.000+00:00
+        auth_state_description: auth_state_description
+        name: name
+        state: INITIALIZED
+        state_message: state_message
+        linked_account_scopes:
+        - linked_account_scopes
+        - linked_account_scopes
+        - linked_account_scopes
+        - linked_account_scopes
+        - linked_account_scopes
+        - linked_account_scopes
+        - linked_account_scopes
+        - linked_account_scopes
+        - linked_account_scopes
+        - linked_account_scopes
+    LinkedAccountCredentialsRequest:
+      type: object
+      properties:
+        linked_account:
+          type: string
+          description: LinkedAccount name
+        consumer_id:
+          type: string
+          description: "consumer_id, if specified, will ensure that the LinkedAccount\
+            \ is owner by the given consumer if a wildcard '-' is used for the LinkedAccount_id,\
+            \ this field is required"
+      description: Returns the linked account's access token
+    LinkedAccountCredentialsResponse:
+      type: object
+      properties:
+        credentials:
+          $ref: '#/components/schemas/LinkedAccountCredentialsResponse_Credentials'
+        linked_account:
+          $ref: '#/components/schemas/LinkedAccount'
+      description: Token associated with the LinkedAccount
+      example:
+        credentials:
+          expiry_time: 2000-01-23T04:56:07.000+00:00
+          token: token
+        linked_account:
+          install_uri: install_uri
+          create_time: 2000-01-23T04:56:07.000+00:00
+          credentials:
+            key: credentials
+          auth_state: UNAVAILABLE
+          labels:
+            key: labels
+          uid: uid
+          consumer_id: consumer_id
+          consumer_config_values:
+            key: consumer_config_values
+          update_time: 2000-01-23T04:56:07.000+00:00
+          auth_state_description: auth_state_description
+          name: name
+          state: INITIALIZED
+          state_message: state_message
+          linked_account_scopes:
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+    LinkedAccountCredentialsResponse_Credentials:
+      type: object
+      properties:
+        token:
+          type: string
+          description: LinkedAccount access token
+        expiry_time:
+          type: string
+          description: timestamp for when a new token should be requested
+          format: date-time
+      description: Message for linked account credentials
+      example:
+        expiry_time: 2000-01-23T04:56:07.000+00:00
+        token: token
+    LinkedAccountLog:
+      type: object
+      properties:
+        name:
+          pattern: "^connectors/[a-z2-7]{26}/linkedaccounts/[a-z2-7]{26}/linkedaccountlogs/[a-z2-7]{26}$"
+          type: string
+          description: "The name of the linked account log Format: connectors/{connector}/linkedaccounts/{linked_account}/linkedaccountlogs/{linked_account_log}"
+          readOnly: true
+        uid:
+          type: string
+          description: The system ID of the resource
+          readOnly: true
+        request_id:
+          type: string
+          description: request id of the request that generated this log
+        action:
+          type: string
+          description: action that triggered the workflow that generated the log message
+        level:
+          type: string
+          description: The log level
+          format: enum
+          enum:
+          - INFO
+          - WARNING
+          - ERROR
+        message:
+          type: string
+          description: The log message
+        state:
+          type: string
+          description: capture the current linkedaccount state in the log messages?
+            linked account state
+          format: enum
+          enum:
+          - INITIALIZED
+          - ACTIVE
+          - FAILED
+          - DISABLED
+        auth_state:
+          type: string
+          description: linked account auth state
+          format: enum
+          enum:
+          - UNAVAILABLE
+          - VALID
+          - REAUTH_REQUIRED
+          - EXPIRING
+          - INVALID
+        create_time:
+          type: string
+          description: The log timestamp
+          format: date-time
+          readOnly: true
+        update_time:
+          type: string
+          description: "Update timestamp, not used"
+          format: date-time
+          readOnly: true
+      description: LinkedAccountLogs
+      example:
+        uid: uid
+        update_time: 2000-01-23T04:56:07.000+00:00
+        create_time: 2000-01-23T04:56:07.000+00:00
+        level: INFO
+        name: name
+        auth_state: UNAVAILABLE
+        action: action
+        state: INITIALIZED
+        message: message
+        request_id: request_id
+    ListConnectorsResponse:
+      type: object
+      properties:
+        connectors:
+          type: array
+          description: The available connectors.
+          items:
+            $ref: '#/components/schemas/Connector'
+        next_page_token:
+          type: string
+          description: "A token, which can be sent as `page_token` to retrieve the\
+            \ next page. If this field is omitted, there are no subsequent pages."
+      description: Response for listAPIsResponse
+      example:
+        connectors:
+        - api_key_config:
+            parameter_field: parameter_field
+            consumer_config_key: consumer_config_key
+            prefix: prefix
+            header: true
+          uid: uid
+          auth_type: OAUTH2
+          update_time: 2000-01-23T04:56:07.000+00:00
+          create_time: 2000-01-23T04:56:07.000+00:00
+          marketplace_app: marketplace_app
+          oauth2_config:
+            extra_token_uri_params:
+              key: extra_token_uri_params
+            token_uri: token_uri
+            extra_authorization_uri_params:
+              key: extra_authorization_uri_params
+            authorization_uri: authorization_uri
+            revocation_uri: http://example.com/aeiou
+            client_secret: client_secret
+            redirect_uri: http://example.com/aeiou
+            scopes:
+            - scopes
+            - scopes
+            - scopes
+            - scopes
+            - scopes
+            - scopes
+            - scopes
+            - scopes
+            - scopes
+            - scopes
+            client_id: client_id
+          name: name
+          slug: slug
+        - api_key_config:
+            parameter_field: parameter_field
+            consumer_config_key: consumer_config_key
+            prefix: prefix
+            header: true
+          uid: uid
+          auth_type: OAUTH2
+          update_time: 2000-01-23T04:56:07.000+00:00
+          create_time: 2000-01-23T04:56:07.000+00:00
+          marketplace_app: marketplace_app
+          oauth2_config:
+            extra_token_uri_params:
+              key: extra_token_uri_params
+            token_uri: token_uri
+            extra_authorization_uri_params:
+              key: extra_authorization_uri_params
+            authorization_uri: authorization_uri
+            revocation_uri: http://example.com/aeiou
+            client_secret: client_secret
+            redirect_uri: http://example.com/aeiou
+            scopes:
+            - scopes
+            - scopes
+            - scopes
+            - scopes
+            - scopes
+            - scopes
+            - scopes
+            - scopes
+            - scopes
+            - scopes
+            client_id: client_id
+          name: name
+          slug: slug
+        next_page_token: next_page_token
+    ListLinkedAccountLogsResponse:
+      type: object
+      properties:
+        linked_account_logs:
+          type: array
+          description: The available connectors.
+          items:
+            $ref: '#/components/schemas/LinkedAccountLog'
+        next_page_token:
+          type: string
+          description: "A token, which can be sent as `page_token` to retrieve the\
+            \ next page. If this field is omitted, there are no subsequent pages."
+      description: List linked accounts logs response
+      example:
+        next_page_token: next_page_token
+        linked_account_logs:
+        - uid: uid
+          update_time: 2000-01-23T04:56:07.000+00:00
+          create_time: 2000-01-23T04:56:07.000+00:00
+          level: INFO
+          name: name
+          auth_state: UNAVAILABLE
+          action: action
+          state: INITIALIZED
+          message: message
+          request_id: request_id
+        - uid: uid
+          update_time: 2000-01-23T04:56:07.000+00:00
+          create_time: 2000-01-23T04:56:07.000+00:00
+          level: INFO
+          name: name
+          auth_state: UNAVAILABLE
+          action: action
+          state: INITIALIZED
+          message: message
+          request_id: request_id
+    ListLinkedAccountsResponse:
+      type: object
+      properties:
+        linked_accounts:
+          type: array
+          description: list of LinkedAccounts
+          items:
+            $ref: '#/components/schemas/LinkedAccount'
+        next_page_token:
+          type: string
+          description: "A token, which can be sent as `page_token` to retrieve the\
+            \ next page. If this field is omitted, there are no subsequent pages."
+      description: Response for listLinkedAccountsResponse
+      example:
+        next_page_token: next_page_token
+        linked_accounts:
+        - install_uri: install_uri
+          create_time: 2000-01-23T04:56:07.000+00:00
+          credentials:
+            key: credentials
+          auth_state: UNAVAILABLE
+          labels:
+            key: labels
+          uid: uid
+          consumer_id: consumer_id
+          consumer_config_values:
+            key: consumer_config_values
+          update_time: 2000-01-23T04:56:07.000+00:00
+          auth_state_description: auth_state_description
+          name: name
+          state: INITIALIZED
+          state_message: state_message
+          linked_account_scopes:
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+        - install_uri: install_uri
+          create_time: 2000-01-23T04:56:07.000+00:00
+          credentials:
+            key: credentials
+          auth_state: UNAVAILABLE
+          labels:
+            key: labels
+          uid: uid
+          consumer_id: consumer_id
+          consumer_config_values:
+            key: consumer_config_values
+          update_time: 2000-01-23T04:56:07.000+00:00
+          auth_state_description: auth_state_description
+          name: name
+          state: INITIALIZED
+          state_message: state_message
+          linked_account_scopes:
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+    Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: "The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code]."
+          format: int32
+        message:
+          type: string
+          description: "A developer-facing error message, which should be in English.\
+            \ Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details]\
+            \ field, or localized by the client."
+        details:
+          type: array
+          description: A list of messages that carry the error details.  There is
+            a common set of message types for APIs to use.
+          items:
+            $ref: '#/components/schemas/GoogleProtobufAny'
+      description: "The `Status` type defines a logical error model that is suitable\
+        \ for different programming environments, including REST APIs and RPC APIs.\
+        \ It is used by [gRPC](https://github.com/grpc). Each `Status` message contains\
+        \ three pieces of data: error code, error message, and error details. You\
+        \ can find out more about this error model and how to work with it in the\
+        \ [API Design Guide](https://cloud.google.com/apis/design/errors)."
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: API-KEY
