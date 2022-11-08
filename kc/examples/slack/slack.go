@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"log"
 	"os"
 
 	"github.com/kollalabs/sdk-go/kc"
@@ -9,20 +10,28 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
+
 	// Get api key from environment variable
 	apiKey := os.Getenv("KC_API_KEY")
-	// Create a new client
-	kolla := kc.New(apiKey)
-
-	ctx := context.Background()
-	creds, err := kolla.GetCredentials(ctx, "slack", "customer-id-kolla")
-	if err != nil {
-		panic(err)
+	if apiKey == "" {
+		log.Fatal("KC_API_KEY not set")
 	}
-	//creds.LinkedAccount.AuthData
+
+	// Create a new client
+	kolla, err := kc.New(apiKey)
+	if err != nil {
+		log.Fatalf("unable to create kolla connect client: %s\n", err)
+	}
+
+	creds, err := kolla.Credentials(ctx, "slack", "customer-id-kolla")
+	if err != nil {
+		log.Fatalf("unable to load credentials %s\n", err)
+	}
+
 	slackapi := slack.New(creds.Token)
 	_, _, err = slackapi.PostMessage("general", slack.MsgOptionText("Hello world! (Send with Kolla managed token)", false))
 	if err != nil {
-		panic(err)
+		log.Fatalf("unable to post slack message: %s\n", err)
 	}
 }

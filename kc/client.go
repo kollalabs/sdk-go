@@ -2,11 +2,14 @@ package kc
 
 import (
 	"context"
+	"runtime/debug"
 
 	"github.com/kollalabs/sdk-go/kc/swagger"
 )
 
 const BaseURL = "https://api.getkolla.com/connect"
+
+var userAgent = setUserAgent()
 
 // Client struct for kc
 type Client struct {
@@ -15,18 +18,8 @@ type Client struct {
 	OpenAPIClient *swagger.APIClient
 }
 
-// LinkedAccount
-type LinkedAccount struct {
-	swagger.LinkedAccount
-}
+func New(apikey string) (*Client, error) {
 
-// LinkedAccount Credentials
-type Credentials struct {
-	swagger.CredentialsResponseCredentials
-	LinkedAccount *LinkedAccount
-}
-
-func New(apikey string) *Client {
 	client := &Client{}
 	client.APIKey = apikey
 
@@ -34,14 +27,15 @@ func New(apikey string) *Client {
 	configuration := swagger.NewConfiguration()
 	configuration.AddDefaultHeader("Authorization", "Bearer "+apikey)
 	configuration.BasePath = BaseURL
+	configuration.UserAgent = userAgent
 
 	client.OpenAPIClient = swagger.NewAPIClient(configuration)
 
-	return client
+	return client, nil
 }
 
-// Get consumer token from KC api
-func (c *Client) GetConsumerToken(ctx context.Context, consumerID string, consumerName string) (string, error) {
+// ConsumerToken fetches a consumer token from the KC api which is used to initiate the embedded marketplace
+func (c *Client) ConsumerToken(ctx context.Context, consumerID string, consumerName string) (string, error) {
 	// Create consumer token request
 	req := swagger.ConsumerTokenRequest{
 		ConsumerId: consumerID,
@@ -58,7 +52,19 @@ func (c *Client) GetConsumerToken(ctx context.Context, consumerID string, consum
 	return consumerTokenResponse.Token, nil
 }
 
-func (c *Client) GetCredentials(ctx context.Context, connectorID string, consumerID string) (*Credentials, error) {
+// LinkedAccount
+type LinkedAccount struct {
+	swagger.LinkedAccount
+}
+
+// LinkedAccount Credentials
+type Credentials struct {
+	swagger.CredentialsResponseCredentials
+	LinkedAccount *LinkedAccount
+}
+
+// Credentials returns the credentials for a given consumer and connector
+func (c *Client) Credentials(ctx context.Context, connectorID string, consumerID string) (*Credentials, error) {
 	creds := &Credentials{}
 
 	req := swagger.CredentialsRequest{
@@ -78,4 +84,21 @@ func (c *Client) GetCredentials(ctx context.Context, connectorID string, consume
 	}
 
 	return creds, nil
+}
+
+func setUserAgent() string {
+	userAgent := ""
+	buildInfo, ok := debug.ReadBuildInfo()
+	if !ok {
+		userAgent = "kolla-sdk-go/unknown"
+	} else {
+		// look for the kolla sdk dep
+		for _, v := range buildInfo.Deps {
+			if v.Path == "github.com/kollalabs/sdk-go" {
+				userAgent = "kolla-sdk-go/" + v.Version + " go/" + buildInfo.GoVersion
+				break
+			}
+		}
+	}
+	return userAgent
 }
