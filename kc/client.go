@@ -7,32 +7,41 @@ import (
 	"github.com/kollalabs/sdk-go/kc/swagger"
 )
 
-const BaseURL = "https://api.getkolla.com/connect"
+const baseURL = "https://api.getkolla.com/connect"
 
 var userAgent = setUserAgent()
 
 // Client struct for kc
 type Client struct {
-	APIKey string
 	// Swagger Client
-	OpenAPIClient *swagger.APIClient
+	openAPIClient *swagger.APIClient
 }
 
-func New(apikey string) (*Client, error) {
+// New returns a new KC client, a configuration option modifier function
+// may be provided to configure the underlying client
+func New(apikey string, opts ...ConfigurationOption) (*Client, error) {
 
 	client := &Client{}
-	client.APIKey = apikey
 
 	// Initialize Swagger Client and store it
 	configuration := swagger.NewConfiguration()
-	configuration.AddDefaultHeader("Authorization", "Bearer "+apikey)
-	configuration.BasePath = BaseURL
-	configuration.UserAgent = userAgent
+	configuration.BasePath = baseURL
 
-	client.OpenAPIClient = swagger.NewAPIClient(configuration)
+	for _, v := range opts {
+		// apply configuration options
+		v(configuration)
+	}
+
+	// override the useragent and authorization header
+	configuration.AddDefaultHeader("Authorization", "Bearer "+apikey)
+	configuration.UserAgent = userAgent
+	client.openAPIClient = swagger.NewAPIClient(configuration)
 
 	return client, nil
 }
+
+// ConfigurationOption is a function that can be used to configure the swagger client
+type ConfigurationOption func(*swagger.Configuration)
 
 // ConsumerToken fetches a consumer token from the KC api which is used to initiate the embedded marketplace
 func (c *Client) ConsumerToken(ctx context.Context, consumerID string, consumerName string) (string, error) {
@@ -45,7 +54,7 @@ func (c *Client) ConsumerToken(ctx context.Context, consumerID string, consumerN
 	}
 
 	// Get consumer token
-	consumerTokenResponse, _, err := c.OpenAPIClient.ConnectApi.ConnectConsumerToken(ctx, req)
+	consumerTokenResponse, _, err := c.openAPIClient.ConnectApi.ConnectConsumerToken(ctx, req)
 	if err != nil {
 		return "", err
 	}
@@ -73,7 +82,7 @@ func (c *Client) Credentials(ctx context.Context, connectorID string, consumerID
 	}
 
 	// Get credentials
-	lacreds, _, err := c.OpenAPIClient.ConnectApi.ConnectCredentials(ctx, req, connectorID, "-")
+	lacreds, _, err := c.openAPIClient.ConnectApi.ConnectCredentials(ctx, req, connectorID, "-")
 	if err != nil {
 		return creds, err
 	}
