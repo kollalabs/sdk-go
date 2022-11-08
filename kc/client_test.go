@@ -28,7 +28,6 @@ func TestClientConsumerToken(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    string
 		wantErr bool
 	}{
 		{
@@ -63,8 +62,8 @@ func TestClientConsumerToken(t *testing.T) {
 				t.Errorf("Client.ConsumerToken() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if got != tt.want {
-				t.Errorf("Client.ConsumerToken() = %v, want %v", got, tt.want)
+			if got == "" {
+				t.Errorf("Client.ConsumerToken() = [%v]", got)
 			}
 		})
 	}
