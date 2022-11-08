@@ -6,11 +6,13 @@ import (
 	"github.com/kollalabs/sdk-go/kc/swagger"
 )
 
+const BaseURL = "https://api.getkolla.com/connect/"
+
 // Client struct for kc
 type Client struct {
 	APIKey string
 	// Swagger Client
-	sc *swagger.APIClient
+	OpenAPIClient *swagger.APIClient
 }
 
 // LinkedAccount
@@ -31,15 +33,15 @@ func New(apikey string) *Client {
 	// Initialize Swagger Client and store it
 	configuration := swagger.NewConfiguration()
 	configuration.AddDefaultHeader("Authorization", "Bearer "+apikey)
-	client.sc = swagger.NewAPIClient(configuration)
+	configuration.BasePath = BaseURL
+
+	client.OpenAPIClient = swagger.NewAPIClient(configuration)
 
 	return client
 }
 
 // Get consumer token from KC api
-func (c *Client) GetConsumerToken(consumerID string, consumerName string) (string, error) {
-	// Create empty context
-	ctx := context.Background()
+func (c *Client) GetConsumerToken(ctx context.Context, consumerID string, consumerName string) (string, error) {
 	// Create consumer token request
 	req := swagger.ConsumerTokenRequest{
 		ConsumerId: consumerID,
@@ -49,17 +51,15 @@ func (c *Client) GetConsumerToken(consumerID string, consumerName string) (strin
 	}
 
 	// Get consumer token
-	consumerTokenResponse, _, err := c.sc.ConnectApi.ConnectConsumerToken(ctx, req)
+	consumerTokenResponse, _, err := c.OpenAPIClient.ConnectApi.ConnectConsumerToken(ctx, req)
 	if err != nil {
 		return "", err
 	}
 	return consumerTokenResponse.Token, nil
 }
 
-func (c *Client) GetCredentials(connectorID string, consumerID string) (*Credentials, error) {
+func (c *Client) GetCredentials(ctx context.Context, connectorID string, consumerID string) (*Credentials, error) {
 	creds := &Credentials{}
-	// Create empty context
-	ctx := context.Background()
 
 	req := swagger.LinkedAccountCredentialsRequest{
 		ConsumerId:    consumerID,
@@ -67,7 +67,7 @@ func (c *Client) GetCredentials(connectorID string, consumerID string) (*Credent
 	}
 
 	// Get credentials
-	lacreds, _, err := c.sc.ConnectApi.ConnectLinkedAccountCredentials(ctx, req, connectorID, "-")
+	lacreds, _, err := c.OpenAPIClient.ConnectApi.ConnectLinkedAccountCredentials(ctx, req, connectorID, "-")
 	if err != nil {
 		return creds, err
 	}
