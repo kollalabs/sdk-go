@@ -12,7 +12,7 @@ import (
 )
 
 // Message for linked account credentials
-type LinkedAccountCredentialsResponseCredentials struct {
+type CredentialsResponseCredentials struct {
 	// LinkedAccount access token
 	Token string `json:"token,omitempty"`
 	// timestamp for when a new token should be requested

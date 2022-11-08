@@ -25,8 +25,10 @@ type LinkedAccount struct {
 	State string `json:"state,omitempty"`
 	// A user displayable message about the linked_account state
 	StateMessage string `json:"state_message,omitempty"`
-	// Current credentials for the linked account, only needs to be supplied if migrating existing credentials into Kolla. Credentials can only be accessed through the LinkedAccountCredentials endpoint
+	// Current credentials for the linked account, only needs to be supplied if migrating existing credentials into Kolla. Credentials can only be accessed through the Credentials endpoint
 	Credentials map[string]string `json:"credentials,omitempty"`
+	// Additional auth data received from the connected provider during consumer authentication
+	AuthData *interface{} `json:"auth_data,omitempty"`
 	// current state of the embedded credentials, can be used to determine if the user needs to re-auth before the credentials expire or need to be manually refreshed, typically a sub-state of the state field
 	AuthState string `json:"auth_state,omitempty"`
 	// A user displayable message about the auth state

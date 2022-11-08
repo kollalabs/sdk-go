@@ -6,7 +6,7 @@ import (
 	"github.com/kollalabs/sdk-go/kc/swagger"
 )
 
-const BaseURL = "https://api.getkolla.com/connect/"
+const BaseURL = "https://api.getkolla.com/connect"
 
 // Client struct for kc
 type Client struct {
@@ -22,7 +22,7 @@ type LinkedAccount struct {
 
 // LinkedAccount Credentials
 type Credentials struct {
-	swagger.LinkedAccountCredentialsResponseCredentials
+	swagger.CredentialsResponseCredentials
 	LinkedAccount *LinkedAccount
 }
 
@@ -61,13 +61,13 @@ func (c *Client) GetConsumerToken(ctx context.Context, consumerID string, consum
 func (c *Client) GetCredentials(ctx context.Context, connectorID string, consumerID string) (*Credentials, error) {
 	creds := &Credentials{}
 
-	req := swagger.LinkedAccountCredentialsRequest{
+	req := swagger.CredentialsRequest{
 		ConsumerId:    consumerID,
 		LinkedAccount: "",
 	}
 
 	// Get credentials
-	lacreds, _, err := c.OpenAPIClient.ConnectApi.ConnectLinkedAccountCredentials(ctx, req, connectorID, "-")
+	lacreds, _, err := c.OpenAPIClient.ConnectApi.ConnectCredentials(ctx, req, connectorID, "-")
 	if err != nil {
 		return creds, err
 	}

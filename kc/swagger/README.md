@@ -24,12 +24,12 @@ Class | Method | HTTP request | Description
 *ConnectApi* | [**ConnectConsumerToken**](docs/ConnectApi.md#connectconsumertoken) | **Post** /v1/consumers:consumerToken | Consumer Token
 *ConnectApi* | [**ConnectCreateConnector**](docs/ConnectApi.md#connectcreateconnector) | **Post** /v1/connectors | Create connector
 *ConnectApi* | [**ConnectCreateLinkedAccount**](docs/ConnectApi.md#connectcreatelinkedaccount) | **Post** /v1/connectors/{connector}/linkedaccounts | Create LinkedAccount
+*ConnectApi* | [**ConnectCredentials**](docs/ConnectApi.md#connectcredentials) | **Post** /v1/connectors/{connector}/linkedaccounts/{linkedaccount}:credentials | LinkedAccount Credentials
 *ConnectApi* | [**ConnectDisableLinkedAccount**](docs/ConnectApi.md#connectdisablelinkedaccount) | **Post** /v1/connectors/{connector}/linkedaccounts/{linkedaccount}:disable | DisableLinkedAccount
 *ConnectApi* | [**ConnectGetConnector**](docs/ConnectApi.md#connectgetconnector) | **Get** /v1/connectors/{connector} | Get Connector
 *ConnectApi* | [**ConnectGetLinkedAccount**](docs/ConnectApi.md#connectgetlinkedaccount) | **Get** /v1/connectors/{connector}/linkedaccounts/{linkedaccount} | Get LinkedAccount
-*ConnectApi* | [**ConnectLinkedAccountCredentials**](docs/ConnectApi.md#connectlinkedaccountcredentials) | **Post** /v1/connectors/{connector}/linkedaccounts/{linkedaccount}:linkedAccountCredentials | LinkedAccount Credentials
 *ConnectApi* | [**ConnectListConnectors**](docs/ConnectApi.md#connectlistconnectors) | **Get** /v1/connectors | List Connectors
-*ConnectApi* | [**ConnectListLinkedAccountLogs**](docs/ConnectApi.md#connectlistlinkedaccountlogs) | **Get** /v1/connectors/{connector}/linkedaccounts/{linkedaccount}/linkedaccountlogs | ListLinkedAccountLogs
+*ConnectApi* | [**ConnectListLinkedAccountLogs**](docs/ConnectApi.md#connectlistlinkedaccountlogs) | **Get** /v1/connectors/{connector}/linkedaccounts/{linkedaccount}/logs | ListLinkedAccountLogs
 *ConnectApi* | [**ConnectListLinkedAccounts**](docs/ConnectApi.md#connectlistlinkedaccounts) | **Get** /v1/connectors/{connector}/linkedaccounts | List LinkedAccounts
 *ConnectApi* | [**ConnectUpdateConnector**](docs/ConnectApi.md#connectupdateconnector) | **Patch** /v1/connectors/{connector} | Update Connector
 
@@ -41,11 +41,11 @@ Class | Method | HTTP request | Description
  - [ConsumerTokenRequest](docs/ConsumerTokenRequest.md)
  - [ConsumerTokenRequestConsumerMetadata](docs/ConsumerTokenRequestConsumerMetadata.md)
  - [ConsumerTokenResponse](docs/ConsumerTokenResponse.md)
+ - [CredentialsRequest](docs/CredentialsRequest.md)
+ - [CredentialsResponse](docs/CredentialsResponse.md)
+ - [CredentialsResponseCredentials](docs/CredentialsResponseCredentials.md)
  - [DisableLinkedAccountRequest](docs/DisableLinkedAccountRequest.md)
  - [LinkedAccount](docs/LinkedAccount.md)
- - [LinkedAccountCredentialsRequest](docs/LinkedAccountCredentialsRequest.md)
- - [LinkedAccountCredentialsResponse](docs/LinkedAccountCredentialsResponse.md)
- - [LinkedAccountCredentialsResponseCredentials](docs/LinkedAccountCredentialsResponseCredentials.md)
  - [LinkedAccountLog](docs/LinkedAccountLog.md)
  - [ListConnectorsResponse](docs/ListConnectorsResponse.md)
  - [ListLinkedAccountLogsResponse](docs/ListLinkedAccountLogsResponse.md)
@@ -53,8 +53,8 @@ Class | Method | HTTP request | Description
  - [Status](docs/Status.md)
 
 ## Documentation For Authorization
+ Endpoints do not require authorization.
 
-## bearerAuth
 
 ## Author
 

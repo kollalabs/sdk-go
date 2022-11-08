@@ -13,7 +13,7 @@ import (
 
 // LinkedAccountLogs
 type LinkedAccountLog struct {
-	// The name of the linked account log Format: connectors/{connector}/linkedaccounts/{linked_account}/linkedaccountlogs/{linked_account_log}
+	// The name of the linked account log Format: connectors/{connector}/linkedaccounts/{linked_account}/logs/{linked_account_log}
 	Name string `json:"name,omitempty"`
 	// The system ID of the resource
 	Uid string `json:"uid,omitempty"`
@@ -21,6 +21,8 @@ type LinkedAccountLog struct {
 	RequestId string `json:"request_id,omitempty"`
 	// action that triggered the workflow that generated the log message
 	Action string `json:"action,omitempty"`
+	// code associated with the log message
+	Code string `json:"code,omitempty"`
 	// The log level
 	Level string `json:"level,omitempty"`
 	// The log message

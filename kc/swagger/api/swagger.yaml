@@ -306,7 +306,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Status'
-  /v1/connectors/{connector}/linkedaccounts/{linkedaccount}/linkedaccountlogs:
+  /v1/connectors/{connector}/linkedaccounts/{linkedaccount}/logs:
     get:
       tags:
       - Connect
@@ -375,6 +375,55 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Status'
+  /v1/connectors/{connector}/linkedaccounts/{linkedaccount}:credentials:
+    post:
+      tags:
+      - Connect
+      summary: LinkedAccount Credentials
+      description: |-
+        Returns the current auth credentials and expiry time
+         for a given LinkedAccount, to use consumer_id in place of the linked_account_id,
+         the linked_account_id in the url path should be a `-`
+         and the consumer_id specified in the request body
+         {connector} can be either the connector id or slug
+         /v1/{linked_account=connectors/{connector}/linkedaccounts/-}:credentials
+      operationId: Connect_Credentials
+      parameters:
+      - name: connector
+        in: path
+        description: The connector id.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: linkedaccount
+        in: path
+        description: The linkedaccount id.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CredentialsRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CredentialsResponse'
+        default:
+          description: Default error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
   /v1/connectors/{connector}/linkedaccounts/{linkedaccount}:disable:
     post:
       tags:
@@ -412,55 +461,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LinkedAccount'
-        default:
-          description: Default error response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Status'
-  /v1/connectors/{connector}/linkedaccounts/{linkedaccount}:linkedAccountCredentials:
-    post:
-      tags:
-      - Connect
-      summary: LinkedAccount Credentials
-      description: |-
-        Returns the current auth credentials and expiry time
-         for a given LinkedAccount, to use consumer_id in place of the linked_account_id,
-         the linked_account_id in the url path should be a `-`
-         and the consumer_id specified in the request body
-         {connector} can be either the connector id or slug
-         /v1/{linked_account=connectors/{connector}/linkedaccounts/-}:linkedAccountCredentials
-      operationId: Connect_LinkedAccountCredentials
-      parameters:
-      - name: connector
-        in: path
-        description: The connector id.
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      - name: linkedaccount
-        in: path
-        description: The linkedaccount id.
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LinkedAccountCredentialsRequest'
-        required: true
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LinkedAccountCredentialsResponse'
         default:
           description: Default error response
           content:
@@ -510,9 +510,9 @@ components:
           description: The system ID of the resource
           readOnly: true
         slug:
-          maxLength: 25
+          maxLength: 32
           minLength: 4
-          pattern: "^[a-z90-9\\-\\_]{4,25}$"
+          pattern: "^[a-z90-9\\-\\_]{4,32}$"
           type: string
           description: Short name that can be used to identify the connector in place
             of using the ID
@@ -708,7 +708,7 @@ components:
       type: object
       properties:
         name:
-          pattern: ^linkedaccountcredentials/*$
+          pattern: ^consumertoken/*$
           type: string
           description: name of the token
         token:
@@ -721,6 +721,73 @@ components:
       description: Response for a consumer token
       example:
         name: name
+        expiry_time: 2000-01-23T04:56:07.000+00:00
+        token: token
+    CredentialsRequest:
+      type: object
+      properties:
+        linked_account:
+          type: string
+          description: LinkedAccount name
+        consumer_id:
+          type: string
+          description: "consumer_id, if specified, will ensure that the LinkedAccount\
+            \ is owner by the given consumer if a wildcard '-' is used for the LinkedAccount_id,\
+            \ this field is required"
+      description: Returns the linked account's access token
+    CredentialsResponse:
+      type: object
+      properties:
+        credentials:
+          $ref: '#/components/schemas/CredentialsResponse_Credentials'
+        linked_account:
+          $ref: '#/components/schemas/LinkedAccount'
+      description: Token associated with the LinkedAccount
+      example:
+        credentials:
+          expiry_time: 2000-01-23T04:56:07.000+00:00
+          token: token
+        linked_account:
+          install_uri: install_uri
+          create_time: 2000-01-23T04:56:07.000+00:00
+          credentials:
+            key: credentials
+          auth_state: UNAVAILABLE
+          auth_data: {}
+          labels:
+            key: labels
+          uid: uid
+          consumer_id: consumer_id
+          consumer_config_values:
+            key: consumer_config_values
+          update_time: 2000-01-23T04:56:07.000+00:00
+          auth_state_description: auth_state_description
+          name: name
+          state: INITIALIZED
+          state_message: state_message
+          linked_account_scopes:
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+          - linked_account_scopes
+    CredentialsResponse_Credentials:
+      type: object
+      properties:
+        token:
+          type: string
+          description: LinkedAccount access token
+        expiry_time:
+          type: string
+          description: timestamp for when a new token should be requested
+          format: date-time
+      description: Message for linked account credentials
+      example:
         expiry_time: 2000-01-23T04:56:07.000+00:00
         token: token
     DisableLinkedAccountRequest:
@@ -783,8 +850,12 @@ components:
             type: string
           description: "Current credentials for the linked account, only needs to\
             \ be supplied if migrating existing credentials into Kolla. Credentials\
-            \ can only be accessed through the LinkedAccountCredentials endpoint"
+            \ can only be accessed through the Credentials endpoint"
           writeOnly: true
+        auth_data:
+          type: object
+          description: Additional auth data received from the connected provider during
+            consumer authentication
         auth_state:
           type: string
           description: "current state of the embedded credentials, can be used to\
@@ -797,7 +868,6 @@ components:
           - UNAVAILABLE
           - VALID
           - REAUTH_REQUIRED
-          - EXPIRING
           - INVALID
         auth_state_description:
           type: string
@@ -838,6 +908,7 @@ components:
         credentials:
           key: credentials
         auth_state: UNAVAILABLE
+        auth_data: {}
         labels:
           key: labels
         uid: uid
@@ -860,79 +931,13 @@ components:
         - linked_account_scopes
         - linked_account_scopes
         - linked_account_scopes
-    LinkedAccountCredentialsRequest:
-      type: object
-      properties:
-        linked_account:
-          type: string
-          description: LinkedAccount name
-        consumer_id:
-          type: string
-          description: "consumer_id, if specified, will ensure that the LinkedAccount\
-            \ is owner by the given consumer if a wildcard '-' is used for the LinkedAccount_id,\
-            \ this field is required"
-      description: Returns the linked account's access token
-    LinkedAccountCredentialsResponse:
-      type: object
-      properties:
-        credentials:
-          $ref: '#/components/schemas/LinkedAccountCredentialsResponse_Credentials'
-        linked_account:
-          $ref: '#/components/schemas/LinkedAccount'
-      description: Token associated with the LinkedAccount
-      example:
-        credentials:
-          expiry_time: 2000-01-23T04:56:07.000+00:00
-          token: token
-        linked_account:
-          install_uri: install_uri
-          create_time: 2000-01-23T04:56:07.000+00:00
-          credentials:
-            key: credentials
-          auth_state: UNAVAILABLE
-          labels:
-            key: labels
-          uid: uid
-          consumer_id: consumer_id
-          consumer_config_values:
-            key: consumer_config_values
-          update_time: 2000-01-23T04:56:07.000+00:00
-          auth_state_description: auth_state_description
-          name: name
-          state: INITIALIZED
-          state_message: state_message
-          linked_account_scopes:
-          - linked_account_scopes
-          - linked_account_scopes
-          - linked_account_scopes
-          - linked_account_scopes
-          - linked_account_scopes
-          - linked_account_scopes
-          - linked_account_scopes
-          - linked_account_scopes
-          - linked_account_scopes
-          - linked_account_scopes
-    LinkedAccountCredentialsResponse_Credentials:
-      type: object
-      properties:
-        token:
-          type: string
-          description: LinkedAccount access token
-        expiry_time:
-          type: string
-          description: timestamp for when a new token should be requested
-          format: date-time
-      description: Message for linked account credentials
-      example:
-        expiry_time: 2000-01-23T04:56:07.000+00:00
-        token: token
     LinkedAccountLog:
       type: object
       properties:
         name:
-          pattern: "^connectors/[a-z2-7]{26}/linkedaccounts/[a-z2-7]{26}/linkedaccountlogs/[a-z2-7]{26}$"
+          pattern: "^connectors/[a-z2-7]{26}/linkedaccounts/[a-z2-7]{26}/logs/[a-z2-7]{26}$"
           type: string
-          description: "The name of the linked account log Format: connectors/{connector}/linkedaccounts/{linked_account}/linkedaccountlogs/{linked_account_log}"
+          description: "The name of the linked account log Format: connectors/{connector}/linkedaccounts/{linked_account}/logs/{linked_account_log}"
           readOnly: true
         uid:
           type: string
@@ -944,13 +949,15 @@ components:
         action:
           type: string
           description: action that triggered the workflow that generated the log message
+        code:
+          type: string
+          description: code associated with the log message
         level:
           type: string
           description: The log level
           format: enum
           enum:
           - INFO
-          - WARNING
           - ERROR
         message:
           type: string
@@ -973,7 +980,6 @@ components:
           - UNAVAILABLE
           - VALID
           - REAUTH_REQUIRED
-          - EXPIRING
           - INVALID
         create_time:
           type: string
@@ -989,6 +995,7 @@ components:
       example:
         uid: uid
         update_time: 2000-01-23T04:56:07.000+00:00
+        code: code
         create_time: 2000-01-23T04:56:07.000+00:00
         level: INFO
         name: name
@@ -1099,6 +1106,7 @@ components:
         linked_account_logs:
         - uid: uid
           update_time: 2000-01-23T04:56:07.000+00:00
+          code: code
           create_time: 2000-01-23T04:56:07.000+00:00
           level: INFO
           name: name
@@ -1109,6 +1117,7 @@ components:
           request_id: request_id
         - uid: uid
           update_time: 2000-01-23T04:56:07.000+00:00
+          code: code
           create_time: 2000-01-23T04:56:07.000+00:00
           level: INFO
           name: name
@@ -1138,6 +1147,7 @@ components:
           credentials:
             key: credentials
           auth_state: UNAVAILABLE
+          auth_data: {}
           labels:
             key: labels
           uid: uid
@@ -1165,6 +1175,7 @@ components:
           credentials:
             key: credentials
           auth_state: UNAVAILABLE
+          auth_data: {}
           labels:
             key: labels
           uid: uid
@@ -1211,8 +1222,3 @@ components:
         \ three pieces of data: error code, error message, and error details. You\
         \ can find out more about this error model and how to work with it in the\
         \ [API Design Guide](https://cloud.google.com/apis/design/errors)."
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: API-KEY

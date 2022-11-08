@@ -7,12 +7,12 @@ Method | HTTP request | Description
 [**ConnectConsumerToken**](ConnectApi.md#ConnectConsumerToken) | **Post** /v1/consumers:consumerToken | Consumer Token
 [**ConnectCreateConnector**](ConnectApi.md#ConnectCreateConnector) | **Post** /v1/connectors | Create connector
 [**ConnectCreateLinkedAccount**](ConnectApi.md#ConnectCreateLinkedAccount) | **Post** /v1/connectors/{connector}/linkedaccounts | Create LinkedAccount
+[**ConnectCredentials**](ConnectApi.md#ConnectCredentials) | **Post** /v1/connectors/{connector}/linkedaccounts/{linkedaccount}:credentials | LinkedAccount Credentials
 [**ConnectDisableLinkedAccount**](ConnectApi.md#ConnectDisableLinkedAccount) | **Post** /v1/connectors/{connector}/linkedaccounts/{linkedaccount}:disable | DisableLinkedAccount
 [**ConnectGetConnector**](ConnectApi.md#ConnectGetConnector) | **Get** /v1/connectors/{connector} | Get Connector
 [**ConnectGetLinkedAccount**](ConnectApi.md#ConnectGetLinkedAccount) | **Get** /v1/connectors/{connector}/linkedaccounts/{linkedaccount} | Get LinkedAccount
-[**ConnectLinkedAccountCredentials**](ConnectApi.md#ConnectLinkedAccountCredentials) | **Post** /v1/connectors/{connector}/linkedaccounts/{linkedaccount}:linkedAccountCredentials | LinkedAccount Credentials
 [**ConnectListConnectors**](ConnectApi.md#ConnectListConnectors) | **Get** /v1/connectors | List Connectors
-[**ConnectListLinkedAccountLogs**](ConnectApi.md#ConnectListLinkedAccountLogs) | **Get** /v1/connectors/{connector}/linkedaccounts/{linkedaccount}/linkedaccountlogs | ListLinkedAccountLogs
+[**ConnectListLinkedAccountLogs**](ConnectApi.md#ConnectListLinkedAccountLogs) | **Get** /v1/connectors/{connector}/linkedaccounts/{linkedaccount}/logs | ListLinkedAccountLogs
 [**ConnectListLinkedAccounts**](ConnectApi.md#ConnectListLinkedAccounts) | **Get** /v1/connectors/{connector}/linkedaccounts | List LinkedAccounts
 [**ConnectUpdateConnector**](ConnectApi.md#ConnectUpdateConnector) | **Patch** /v1/connectors/{connector} | Update Connector
 
@@ -89,6 +89,36 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**LinkedAccount**](LinkedAccount.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **ConnectCredentials**
+> CredentialsResponse ConnectCredentials(ctx, body, connector, linkedaccount)
+LinkedAccount Credentials
+
+Returns the current auth credentials and expiry time  for a given LinkedAccount, to use consumer_id in place of the linked_account_id,  the linked_account_id in the url path should be a `-`  and the consumer_id specified in the request body  {connector} can be either the connector id or slug  /v1/{linked_account=connectors/{connector}/linkedaccounts/-}:credentials
+
+### Required Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+  **body** | [**CredentialsRequest**](CredentialsRequest.md)|  | 
+  **connector** | **string**| The connector id. | 
+  **linkedaccount** | **string**| The linkedaccount id. | 
+
+### Return type
+
+[**CredentialsResponse**](CredentialsResponse.md)
 
 ### Authorization
 
@@ -184,36 +214,6 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **ConnectLinkedAccountCredentials**
-> LinkedAccountCredentialsResponse ConnectLinkedAccountCredentials(ctx, body, connector, linkedaccount)
-LinkedAccount Credentials
-
-Returns the current auth credentials and expiry time  for a given LinkedAccount, to use consumer_id in place of the linked_account_id,  the linked_account_id in the url path should be a `-`  and the consumer_id specified in the request body  {connector} can be either the connector id or slug  /v1/{linked_account=connectors/{connector}/linkedaccounts/-}:linkedAccountCredentials
-
-### Required Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-  **body** | [**LinkedAccountCredentialsRequest**](LinkedAccountCredentialsRequest.md)|  | 
-  **connector** | **string**| The connector id. | 
-  **linkedaccount** | **string**| The linkedaccount id. | 
-
-### Return type
-
-[**LinkedAccountCredentialsResponse**](LinkedAccountCredentialsResponse.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
  - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

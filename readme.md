@@ -62,13 +62,16 @@ func main() {
 	kolla := kc.New(apiKey)
 
 	ctx := context.Background()
-	creds, err := kolla.GetCredentials(ctx, "slack", "CONSUMER_ID")
+	creds, err := kolla.GetCredentials(ctx, "slack", "customer-id-kolla")
 	if err != nil {
 		panic(err)
 	}
-
+	//creds.LinkedAccount.AuthData
 	slackapi := slack.New(creds.Token)
-	slackapi.PostMessage("CHANNEL_ID", slack.MsgOptionText("Hello world", false))
+	_, _, err = slackapi.PostMessage("general", slack.MsgOptionText("Hello world! (Send with Kolla managed token)", false))
+	if err != nil {
+		panic(err)
+	}
 }
 ```
 

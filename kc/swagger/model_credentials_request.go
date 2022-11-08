@@ -9,7 +9,7 @@
 package swagger
 
 // Returns the linked account's access token
-type LinkedAccountCredentialsRequest struct {
+type CredentialsRequest struct {
 	// LinkedAccount name
 	LinkedAccount string `json:"linked_account,omitempty"`
 	// consumer_id, if specified, will ensure that the LinkedAccount is owner by the given consumer if a wildcard '-' is used for the LinkedAccount_id, this field is required

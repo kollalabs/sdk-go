@@ -316,6 +316,106 @@ func (a *ConnectApiService) ConnectCreateLinkedAccount(ctx context.Context, body
 	return localVarReturnValue, localVarHttpResponse, nil
 }
 /*
+ConnectApiService LinkedAccount Credentials
+Returns the current auth credentials and expiry time  for a given LinkedAccount, to use consumer_id in place of the linked_account_id,  the linked_account_id in the url path should be a &#x60;-&#x60;  and the consumer_id specified in the request body  {connector} can be either the connector id or slug  /v1/{linked_account&#x3D;connectors/{connector}/linkedaccounts/-}:credentials
+ * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param body
+ * @param connector The connector id.
+ * @param linkedaccount The linkedaccount id.
+@return CredentialsResponse
+*/
+func (a *ConnectApiService) ConnectCredentials(ctx context.Context, body CredentialsRequest, connector string, linkedaccount string) (CredentialsResponse, *http.Response, error) {
+	var (
+		localVarHttpMethod = strings.ToUpper("Post")
+		localVarPostBody   interface{}
+		localVarFileName   string
+		localVarFileBytes  []byte
+		localVarReturnValue CredentialsResponse
+	)
+
+	// create path and map variables
+	localVarPath := a.client.cfg.BasePath + "/v1/connectors/{connector}/linkedaccounts/{linkedaccount}:credentials"
+	localVarPath = strings.Replace(localVarPath, "{"+"connector"+"}", fmt.Sprintf("%v", connector), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"linkedaccount"+"}", fmt.Sprintf("%v", linkedaccount), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHttpContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHttpContentType := selectHeaderContentType(localVarHttpContentTypes)
+	if localVarHttpContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHttpContentType
+	}
+
+	// to determine the Accept header
+	localVarHttpHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHttpHeaderAccept := selectHeaderAccept(localVarHttpHeaderAccepts)
+	if localVarHttpHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
+	}
+	// body params
+	localVarPostBody = &body
+	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFileName, localVarFileBytes)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHttpResponse, err := a.client.callAPI(r)
+	if err != nil || localVarHttpResponse == nil {
+		return localVarReturnValue, localVarHttpResponse, err
+	}
+
+	localVarBody, err := ioutil.ReadAll(localVarHttpResponse.Body)
+	localVarHttpResponse.Body.Close()
+	if err != nil {
+		return localVarReturnValue, localVarHttpResponse, err
+	}
+
+	if localVarHttpResponse.StatusCode < 300 {
+		// If we succeed, return the data, otherwise pass on to decode error.
+		err = a.client.decode(&localVarReturnValue, localVarBody, localVarHttpResponse.Header.Get("Content-Type"));
+		if err == nil { 
+			return localVarReturnValue, localVarHttpResponse, err
+		}
+	}
+
+	if localVarHttpResponse.StatusCode >= 300 {
+		newErr := GenericSwaggerError{
+			body: localVarBody,
+			error: localVarHttpResponse.Status,
+		}
+		if localVarHttpResponse.StatusCode == 200 {
+			var v CredentialsResponse
+			err = a.client.decode(&v, localVarBody, localVarHttpResponse.Header.Get("Content-Type"));
+				if err != nil {
+					newErr.error = err.Error()
+					return localVarReturnValue, localVarHttpResponse, newErr
+				}
+				newErr.model = v
+				return localVarReturnValue, localVarHttpResponse, newErr
+		}
+		if localVarHttpResponse.StatusCode == 0 {
+			var v Status
+			err = a.client.decode(&v, localVarBody, localVarHttpResponse.Header.Get("Content-Type"));
+				if err != nil {
+					newErr.error = err.Error()
+					return localVarReturnValue, localVarHttpResponse, newErr
+				}
+				newErr.model = v
+				return localVarReturnValue, localVarHttpResponse, newErr
+		}
+		return localVarReturnValue, localVarHttpResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHttpResponse, nil
+}
+/*
 ConnectApiService DisableLinkedAccount
 Disable a linked account (used when disconnecting by a consumer)
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
@@ -608,106 +708,6 @@ func (a *ConnectApiService) ConnectGetLinkedAccount(ctx context.Context, connect
 	return localVarReturnValue, localVarHttpResponse, nil
 }
 /*
-ConnectApiService LinkedAccount Credentials
-Returns the current auth credentials and expiry time  for a given LinkedAccount, to use consumer_id in place of the linked_account_id,  the linked_account_id in the url path should be a &#x60;-&#x60;  and the consumer_id specified in the request body  {connector} can be either the connector id or slug  /v1/{linked_account&#x3D;connectors/{connector}/linkedaccounts/-}:linkedAccountCredentials
- * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param body
- * @param connector The connector id.
- * @param linkedaccount The linkedaccount id.
-@return LinkedAccountCredentialsResponse
-*/
-func (a *ConnectApiService) ConnectLinkedAccountCredentials(ctx context.Context, body LinkedAccountCredentialsRequest, connector string, linkedaccount string) (LinkedAccountCredentialsResponse, *http.Response, error) {
-	var (
-		localVarHttpMethod = strings.ToUpper("Post")
-		localVarPostBody   interface{}
-		localVarFileName   string
-		localVarFileBytes  []byte
-		localVarReturnValue LinkedAccountCredentialsResponse
-	)
-
-	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/v1/connectors/{connector}/linkedaccounts/{linkedaccount}:linkedAccountCredentials"
-	localVarPath = strings.Replace(localVarPath, "{"+"connector"+"}", fmt.Sprintf("%v", connector), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"linkedaccount"+"}", fmt.Sprintf("%v", linkedaccount), -1)
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-
-	// to determine the Content-Type header
-	localVarHttpContentTypes := []string{"application/json"}
-
-	// set Content-Type header
-	localVarHttpContentType := selectHeaderContentType(localVarHttpContentTypes)
-	if localVarHttpContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHttpContentType
-	}
-
-	// to determine the Accept header
-	localVarHttpHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHttpHeaderAccept := selectHeaderAccept(localVarHttpHeaderAccepts)
-	if localVarHttpHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
-	}
-	// body params
-	localVarPostBody = &body
-	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFileName, localVarFileBytes)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHttpResponse, err := a.client.callAPI(r)
-	if err != nil || localVarHttpResponse == nil {
-		return localVarReturnValue, localVarHttpResponse, err
-	}
-
-	localVarBody, err := ioutil.ReadAll(localVarHttpResponse.Body)
-	localVarHttpResponse.Body.Close()
-	if err != nil {
-		return localVarReturnValue, localVarHttpResponse, err
-	}
-
-	if localVarHttpResponse.StatusCode < 300 {
-		// If we succeed, return the data, otherwise pass on to decode error.
-		err = a.client.decode(&localVarReturnValue, localVarBody, localVarHttpResponse.Header.Get("Content-Type"));
-		if err == nil { 
-			return localVarReturnValue, localVarHttpResponse, err
-		}
-	}
-
-	if localVarHttpResponse.StatusCode >= 300 {
-		newErr := GenericSwaggerError{
-			body: localVarBody,
-			error: localVarHttpResponse.Status,
-		}
-		if localVarHttpResponse.StatusCode == 200 {
-			var v LinkedAccountCredentialsResponse
-			err = a.client.decode(&v, localVarBody, localVarHttpResponse.Header.Get("Content-Type"));
-				if err != nil {
-					newErr.error = err.Error()
-					return localVarReturnValue, localVarHttpResponse, newErr
-				}
-				newErr.model = v
-				return localVarReturnValue, localVarHttpResponse, newErr
-		}
-		if localVarHttpResponse.StatusCode == 0 {
-			var v Status
-			err = a.client.decode(&v, localVarBody, localVarHttpResponse.Header.Get("Content-Type"));
-				if err != nil {
-					newErr.error = err.Error()
-					return localVarReturnValue, localVarHttpResponse, newErr
-				}
-				newErr.model = v
-				return localVarReturnValue, localVarHttpResponse, newErr
-		}
-		return localVarReturnValue, localVarHttpResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHttpResponse, nil
-}
-/*
 ConnectApiService List Connectors
 Lists connectors
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
@@ -854,7 +854,7 @@ func (a *ConnectApiService) ConnectListLinkedAccountLogs(ctx context.Context, co
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/v1/connectors/{connector}/linkedaccounts/{linkedaccount}/linkedaccountlogs"
+	localVarPath := a.client.cfg.BasePath + "/v1/connectors/{connector}/linkedaccounts/{linkedaccount}/logs"
 	localVarPath = strings.Replace(localVarPath, "{"+"connector"+"}", fmt.Sprintf("%v", connector), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"linkedaccount"+"}", fmt.Sprintf("%v", linkedaccount), -1)
 

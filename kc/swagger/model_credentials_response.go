@@ -9,7 +9,7 @@
 package swagger
 
 // Token associated with the LinkedAccount
-type LinkedAccountCredentialsResponse struct {
-	Credentials *LinkedAccountCredentialsResponseCredentials `json:"credentials,omitempty"`
+type CredentialsResponse struct {
+	Credentials *CredentialsResponseCredentials `json:"credentials,omitempty"`
 	LinkedAccount *LinkedAccount `json:"linked_account,omitempty"`
 }
