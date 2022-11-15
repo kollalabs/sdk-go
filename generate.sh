@@ -8,6 +8,10 @@ if [ ! -f swagger-codegen-cli.jar ]; then
     exit 0
 fi
 
+# remove the old generated files
+rm ./kc/swagger/model_*.go | true
+rm ./kc/swagger/docs/*.md | true
+
 pushd kc/swagger
 java -jar ../../swagger-codegen-cli.jar generate -l go -i ./api/swagger.yaml --output ./
 # go format the generated files

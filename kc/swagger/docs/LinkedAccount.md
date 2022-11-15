@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 **Name** | **string** | Resource name of the connector | [optional] [default to null]
 **Uid** | **string** | The system ID of the resource | [optional] [default to null]
 **ConsumerId** | **string** | The consumer that the LinkedAccount belongs to | [optional] [default to null]
+**ConsumerMetadata** | [***ConsumerMetadata**](ConsumerMetadata.md) |  | [optional] [default to null]
 **InstallUri** | **string** | Install URL that the end user can use to install the connector The install_uri is only set if the user has not yet completed the install. | [optional] [default to null]
 **State** | **string** | current state of the LinkedAccount | [optional] [default to null]
 **StateMessage** | **string** | A user displayable message about the linked_account state | [optional] [default to null]

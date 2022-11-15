@@ -25,8 +25,8 @@ paths:
         style: form
         explode: true
         schema:
-          maximum: 1000
-          minimum: 1
+          maximum: 1000.0
+          minimum: 1.0
           type: integer
           format: int32
       - name: page_token
@@ -191,8 +191,8 @@ paths:
         style: form
         explode: true
         schema:
-          maximum: 100
-          minimum: 1
+          maximum: 100.0
+          minimum: 1.0
           type: integer
           format: int32
       - name: page_token
@@ -339,8 +339,8 @@ paths:
         style: form
         explode: true
         schema:
-          maximum: 1000
-          minimum: 1
+          maximum: 1000.0
+          minimum: 1.0
           type: integer
           format: int32
       - name: page_token
@@ -678,32 +678,35 @@ components:
         - scopes
         - scopes
         client_id: client_id
+    ConsumerMetadata:
+      type: object
+      properties:
+        title:
+          maxLength: 100
+          type: string
+          description: "consumer title, name of the person or organization the consumer_id\
+            \ is associated with"
+        email:
+          maxLength: 100
+          type: string
+          description: email of the consumer
+      description: consumer metadata
+      example:
+        title: title
+        email: email
     ConsumerTokenRequest:
+      required:
+      - consumer_id
       type: object
       properties:
         consumer_id:
+          maxLength: 100
           type: string
           description: "id that links back to the consumer, can be a user_id, tenant_id,\
             \ machine_id, etc"
         metadata:
-          $ref: '#/components/schemas/ConsumerTokenRequest_ConsumerMetadata'
+          $ref: '#/components/schemas/ConsumerMetadata'
       description: Request for a consumer token
-    ConsumerTokenRequest_ConsumerMetadata:
-      type: object
-      properties:
-        username:
-          type: string
-          description: username of the consumer
-        email:
-          type: string
-          description: email of the consumer
-        tenant_id:
-          type: string
-          description: tenant_id of the consumer
-        tenant_display_name:
-          type: string
-          description: tenant_display_name of the consumer
-      description: consumer metadata
     ConsumerTokenResponse:
       type: object
       properties:
@@ -730,6 +733,7 @@ components:
           type: string
           description: LinkedAccount name
         consumer_id:
+          maxLength: 100
           type: string
           description: "consumer_id, if specified, will ensure that the LinkedAccount\
             \ is owner by the given consumer if a wildcard '-' is used for the LinkedAccount_id,\
@@ -742,7 +746,7 @@ components:
           $ref: '#/components/schemas/CredentialsResponse_Credentials'
         linked_account:
           $ref: '#/components/schemas/LinkedAccount'
-      description: Token associated with the LinkedAccount
+      description: Credentials associated with the LinkedAccount
       example:
         credentials:
           expiry_time: 2000-01-23T04:56:07.000+00:00
@@ -763,6 +767,9 @@ components:
           update_time: 2000-01-23T04:56:07.000+00:00
           auth_state_description: auth_state_description
           name: name
+          consumer_metadata:
+            title: title
+            email: email
           state: INITIALIZED
           state_message: state_message
           linked_account_scopes:
@@ -825,6 +832,8 @@ components:
           maxLength: 100
           type: string
           description: The consumer that the LinkedAccount belongs to
+        consumer_metadata:
+          $ref: '#/components/schemas/ConsumerMetadata'
         install_uri:
           type: string
           description: Install URL that the end user can use to install the connector
@@ -918,6 +927,9 @@ components:
         update_time: 2000-01-23T04:56:07.000+00:00
         auth_state_description: auth_state_description
         name: name
+        consumer_metadata:
+          title: title
+          email: email
         state: INITIALIZED
         state_message: state_message
         linked_account_scopes:
@@ -1157,6 +1169,9 @@ components:
           update_time: 2000-01-23T04:56:07.000+00:00
           auth_state_description: auth_state_description
           name: name
+          consumer_metadata:
+            title: title
+            email: email
           state: INITIALIZED
           state_message: state_message
           linked_account_scopes:
@@ -1185,6 +1200,9 @@ components:
           update_time: 2000-01-23T04:56:07.000+00:00
           auth_state_description: auth_state_description
           name: name
+          consumer_metadata:
+            title: title
+            email: email
           state: INITIALIZED
           state_message: state_message
           linked_account_scopes:
