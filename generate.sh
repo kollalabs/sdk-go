@@ -2,6 +2,8 @@
 
 set -eux
 
+rm ./kc/swagger/model_*.go
+
 # if swagger-codegen-cli.jar is not available, exit
 if [ ! -f swagger-codegen-cli.jar ]; then
     echo "swagger-codegen-cli.jar is not available. Please download with: wget https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/3.0.35/swagger-codegen-cli-3.0.35.jar -O ./swagger-codegen-cli.jar"

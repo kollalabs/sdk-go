@@ -11,6 +11,6 @@ package swagger
 // Request for a consumer token
 type ConsumerTokenRequest struct {
 	// id that links back to the consumer, can be a user_id, tenant_id, machine_id, etc
-	ConsumerId string                                `json:"consumer_id,omitempty"`
-	Metadata   *ConsumerTokenRequestConsumerMetadata `json:"metadata,omitempty"`
+	ConsumerId string            `json:"consumer_id"`
+	Metadata   *ConsumerMetadata `json:"metadata,omitempty"`
 }

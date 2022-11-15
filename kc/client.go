@@ -48,8 +48,8 @@ func (c *Client) ConsumerToken(ctx context.Context, consumerID string, consumerN
 	// Create consumer token request
 	req := swagger.ConsumerTokenRequest{
 		ConsumerId: consumerID,
-		Metadata: &swagger.ConsumerTokenRequestConsumerMetadata{
-			TenantDisplayName: consumerName,
+		Metadata: &swagger.ConsumerMetadata{
+			Title: consumerName,
 		},
 	}
 

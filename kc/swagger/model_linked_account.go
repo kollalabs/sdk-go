@@ -19,7 +19,8 @@ type LinkedAccount struct {
 	// The system ID of the resource
 	Uid string `json:"uid,omitempty"`
 	// The consumer that the LinkedAccount belongs to
-	ConsumerId string `json:"consumer_id,omitempty"`
+	ConsumerId       string            `json:"consumer_id,omitempty"`
+	ConsumerMetadata *ConsumerMetadata `json:"consumer_metadata,omitempty"`
 	// Install URL that the end user can use to install the connector The install_uri is only set if the user has not yet completed the install.
 	InstallUri string `json:"install_uri,omitempty"`
 	// current state of the LinkedAccount
