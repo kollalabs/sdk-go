@@ -2,7 +2,9 @@
 
 set -eux
 
-rm ./kc/swagger/model_*.go
+# remove the old generated files
+rm ./kc/swagger/model_*.go | true
+rm ./kc/swagger/docs/*.md | true
 
 # if swagger-codegen-cli.jar is not available, exit
 if [ ! -f swagger-codegen-cli.jar ]; then
