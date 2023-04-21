@@ -2,6 +2,7 @@ package kc
 
 import (
 	"context"
+	"fmt"
 	"runtime/debug"
 
 	"github.com/kollalabs/sdk-go/kc/swagger"
@@ -45,6 +46,13 @@ type ConfigurationOption func(*swagger.Configuration)
 
 // ConsumerToken fetches a consumer token from the KC api which is used to initiate the embedded marketplace
 func (c *Client) ConsumerToken(ctx context.Context, consumerID string, consumerName string) (string, error) {
+	if c == nil {
+		return "", fmt.Errorf("kolla sdk client is nil")
+	}
+	if c.openAPIClient == nil || c.openAPIClient.ConnectApi == nil {
+		return "", fmt.Errorf("internal kolla http client is not configured")
+	}
+
 	// Create consumer token request
 	req := swagger.ConsumerTokenRequest{
 		ConsumerId: consumerID,
@@ -74,6 +82,13 @@ type Credentials struct {
 
 // Credentials returns the credentials for a given consumer and connector
 func (c *Client) Credentials(ctx context.Context, connectorID string, consumerID string) (*Credentials, error) {
+	if c == nil || c.openAPIClient == nil {
+		return nil, fmt.Errorf("kolla sdk client is nil")
+	}
+	if c.openAPIClient == nil || c.openAPIClient.ConnectApi == nil {
+		return nil, fmt.Errorf("internal kolla http client is not configured")
+	}
+
 	creds := &Credentials{}
 
 	req := swagger.CredentialsRequest{
