@@ -1,6 +1,6 @@
 module github.com/kollalabs/sdk-go/kc/examples
 
-go 1.18
+go 1.19
 
 replace github.com/kollalabs/sdk-go => ../../
 
