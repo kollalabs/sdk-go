@@ -12,6 +12,8 @@ Name | Type | Description | Notes
 **Scopes** | **[]string** | oauth2 scopes | [optional] [default to null]
 **ExtraAuthorizationUriParams** | **map[string]string** | Extra authorization_uri parameters | [optional] [default to null]
 **ExtraTokenUriParams** | **map[string]string** | Extra token_uri parameters | [optional] [default to null]
+**PkceMethod** | **string** | PKCE configuration, if set to S256 PKCE will be used during token exchange | [optional] [default to null]
+**AuthStyle** | **string** | token exchange/refresh auth style, default is \&quot;params\&quot;, options are \&quot;params\&quot;, \&quot;header\&quot;, or \&quot;detect\&quot; | [optional] [default to null]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

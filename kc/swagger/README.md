@@ -23,21 +23,31 @@ Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *ConnectApi* | [**ConnectConsumerToken**](docs/ConnectApi.md#connectconsumertoken) | **Post** /v1/consumers:consumerToken | Consumer Token
 *ConnectApi* | [**ConnectCreateConnector**](docs/ConnectApi.md#connectcreateconnector) | **Post** /v1/connectors | Create connector
+*ConnectApi* | [**ConnectCreateConnectorLink**](docs/ConnectApi.md#connectcreateconnectorlink) | **Post** /v1/connectors/{connector}/links | CreateConnectorLink
 *ConnectApi* | [**ConnectCreateLinkedAccount**](docs/ConnectApi.md#connectcreatelinkedaccount) | **Post** /v1/connectors/{connector}/linkedaccounts | Create LinkedAccount
+*ConnectApi* | [**ConnectCreateLinkedAccountLog**](docs/ConnectApi.md#connectcreatelinkedaccountlog) | **Post** /v1/connectors/{connector}/linkedaccounts/{linkedaccount}/logs | Create LinkedAccountLog
 *ConnectApi* | [**ConnectCredentials**](docs/ConnectApi.md#connectcredentials) | **Post** /v1/connectors/{connector}/linkedaccounts/{linkedaccount}:credentials | LinkedAccount Credentials
 *ConnectApi* | [**ConnectDisableLinkedAccount**](docs/ConnectApi.md#connectdisablelinkedaccount) | **Post** /v1/connectors/{connector}/linkedaccounts/{linkedaccount}:disable | DisableLinkedAccount
 *ConnectApi* | [**ConnectGetConnector**](docs/ConnectApi.md#connectgetconnector) | **Get** /v1/connectors/{connector} | Get Connector
+*ConnectApi* | [**ConnectGetConnectorTemplate**](docs/ConnectApi.md#connectgetconnectortemplate) | **Get** /v1/connectortemplates/{connectortemplate} | Get ConnectorTemplate
 *ConnectApi* | [**ConnectGetLinkedAccount**](docs/ConnectApi.md#connectgetlinkedaccount) | **Get** /v1/connectors/{connector}/linkedaccounts/{linkedaccount} | Get LinkedAccount
 *ConnectApi* | [**ConnectListConnectors**](docs/ConnectApi.md#connectlistconnectors) | **Get** /v1/connectors | List Connectors
 *ConnectApi* | [**ConnectListLinkedAccountLogs**](docs/ConnectApi.md#connectlistlinkedaccountlogs) | **Get** /v1/connectors/{connector}/linkedaccounts/{linkedaccount}/logs | ListLinkedAccountLogs
 *ConnectApi* | [**ConnectListLinkedAccounts**](docs/ConnectApi.md#connectlistlinkedaccounts) | **Get** /v1/connectors/{connector}/linkedaccounts | List LinkedAccounts
+*ConnectApi* | [**ConnectLoadConnectorLink**](docs/ConnectApi.md#connectloadconnectorlink) | **Post** /v1/connectors:loadLink | LoadConnectorLink
+*ConnectApi* | [**ConnectLoadCredentials**](docs/ConnectApi.md#connectloadcredentials) | **Get** /v1/connectors/{connector}/consumers/{consumer}:credentials | LoadCredentials
 *ConnectApi* | [**ConnectUpdateConnector**](docs/ConnectApi.md#connectupdateconnector) | **Patch** /v1/connectors/{connector} | Update Connector
+*ConnectApi* | [**ConnectUpdateLinkedAccount**](docs/ConnectApi.md#connectupdatelinkedaccount) | **Patch** /v1/connectors/{connector}/linkedaccounts/{linkedaccount} | Update LinkedAccount
 
 ## Documentation For Models
 
  - [Connector](docs/Connector.md)
+ - [ConnectorAgentConfig](docs/ConnectorAgentConfig.md)
  - [ConnectorApiKeyConfig](docs/ConnectorApiKeyConfig.md)
+ - [ConnectorBasicAuthConfig](docs/ConnectorBasicAuthConfig.md)
+ - [ConnectorLink](docs/ConnectorLink.md)
  - [ConnectorOauth2Config](docs/ConnectorOauth2Config.md)
+ - [ConnectorTemplate](docs/ConnectorTemplate.md)
  - [ConsumerMetadata](docs/ConsumerMetadata.md)
  - [ConsumerTokenRequest](docs/ConsumerTokenRequest.md)
  - [ConsumerTokenResponse](docs/ConsumerTokenResponse.md)
@@ -46,10 +56,13 @@ Class | Method | HTTP request | Description
  - [CredentialsResponseCredentials](docs/CredentialsResponseCredentials.md)
  - [DisableLinkedAccountRequest](docs/DisableLinkedAccountRequest.md)
  - [LinkedAccount](docs/LinkedAccount.md)
+ - [LinkedAccountAgentAuthData](docs/LinkedAccountAgentAuthData.md)
  - [LinkedAccountLog](docs/LinkedAccountLog.md)
  - [ListConnectorsResponse](docs/ListConnectorsResponse.md)
  - [ListLinkedAccountLogsResponse](docs/ListLinkedAccountLogsResponse.md)
  - [ListLinkedAccountsResponse](docs/ListLinkedAccountsResponse.md)
+ - [LoadConnectorLinkRequest](docs/LoadConnectorLinkRequest.md)
+ - [LoadConnectorLinkResponse](docs/LoadConnectorLinkResponse.md)
  - [Status](docs/Status.md)
 
 ## Documentation For Authorization

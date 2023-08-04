@@ -20,18 +20,24 @@ type LinkedAccountLog struct {
 	Uid string `json:"uid,omitempty"`
 	// request id of the request that generated this log
 	RequestId string `json:"request_id,omitempty"`
-	// action that triggered the workflow that generated the log message
-	Action string `json:"action,omitempty"`
+	// action that triggered the workflow that generated the log message this should not be free-form text, it should be one of a small set of values that can be used to filter logs
+	Action string `json:"action"`
 	// code associated with the log message
 	Code string `json:"code,omitempty"`
 	// The log level
-	Level string `json:"level,omitempty"`
+	Level string `json:"level"`
+	// Error class associated with the log message
+	ErrorClass string `json:"error_class,omitempty"`
 	// The log message
 	Message string `json:"message,omitempty"`
 	// capture the current linkedaccount state in the log messages? linked account state
 	State string `json:"state,omitempty"`
 	// linked account auth state
 	AuthState string `json:"auth_state,omitempty"`
+	// consumer id
+	ConsumerId string `json:"consumer_id,omitempty"`
+	// consumer title
+	ConsumerTitle string `json:"consumer_title,omitempty"`
 	// The log timestamp
 	CreateTime time.Time `json:"create_time,omitempty"`
 	// Update timestamp, not used

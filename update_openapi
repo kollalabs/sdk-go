@@ -1,0 +1,3 @@
+#!/bin/bash
+
+cp $(go env GOPATH)/src/github.com/kollalabs/schema/_gen/openapi/kolla/connect_v1.yaml ./kc/swagger/api/swagger.yaml
