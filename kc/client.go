@@ -101,8 +101,11 @@ func (c *Client) Credentials(ctx context.Context, connectorID string, consumerID
 	if err != nil {
 		return creds, err
 	}
+
 	creds.Token = lacreds.Credentials.Token
 	creds.ExpiryTime = lacreds.Credentials.ExpiryTime
+	creds.Secrets = lacreds.Credentials.Secrets
+
 	creds.LinkedAccount = &LinkedAccount{
 		LinkedAccount: *lacreds.LinkedAccount,
 	}
