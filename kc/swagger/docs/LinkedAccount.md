@@ -11,7 +11,8 @@ Name | Type | Description | Notes
 **State** | **string** | current state of the LinkedAccount | [optional] [default to null]
 **StateMessage** | **string** | A user displayable message about the linked_account state | [optional] [default to null]
 **Credentials** | **map[string]string** | Current credentials for the linked account, only needs to be supplied if migrating existing credentials into Kolla. Credentials can only be accessed through the Credentials endpoint | [optional] [default to null]
-**AuthData** | [***interface{}**](interface{}.md) | Additional auth data received from the connected provider during consumer authentication | [optional] [default to null]
+**AuthData** | [***interface{}**](interface{}.md) | Additional auth data received from the provider during consumer authentication, typically from oauth flows | [optional] [default to null]
+**AgentAuthData** | [***LinkedAccountAgentAuthData**](LinkedAccount_AgentAuthData.md) |  | [optional] [default to null]
 **AuthState** | **string** | current state of the embedded credentials, can be used to determine if the user needs to re-auth before the credentials expire or need to be manually refreshed, typically a sub-state of the state field | [optional] [default to null]
 **AuthStateDescription** | **string** | A user displayable message about the auth state | [optional] [default to null]
 **LinkedAccountScopes** | **[]string** | Scopes associated with the linked account credentials, only needs to be provided if migrating credentials into Kolla | [optional] [default to null]
@@ -19,6 +20,7 @@ Name | Type | Description | Notes
 **ConsumerConfigValues** | **map[string]string** | Configuration values provided by the consumer | [optional] [default to null]
 **CreateTime** | [**time.Time**](time.Time.md) | Timestamps. See: https://aip.kolla.dev/kolla/9001 create time | [optional] [default to null]
 **UpdateTime** | [**time.Time**](time.Time.md) | time of last update | [optional] [default to null]
+**ExpireTime** | [**time.Time**](time.Time.md) | expiration time of the linked account, active linked accounts don&#x27;t expire, expired linked accounts will be deleted soon after expiration | [optional] [default to null]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

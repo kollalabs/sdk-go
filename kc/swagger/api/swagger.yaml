@@ -166,6 +166,43 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Status'
+  /v1/connectors/{connector}/consumers/{consumer}:credentials:
+    get:
+      tags:
+      - Connect
+      summary: LoadCredentials
+      description: An alias endpoint for easier obtaining of credentials
+      operationId: Connect_LoadCredentials
+      parameters:
+      - name: connector
+        in: path
+        description: The connector id.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: consumer
+        in: path
+        description: The consumer id.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CredentialsResponse'
+        default:
+          description: Default error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
   /v1/connectors/{connector}/linkedaccounts:
     get:
       tags:
@@ -306,6 +343,57 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Status'
+    patch:
+      tags:
+      - Connect
+      summary: Update LinkedAccount
+      description: This udates a LinkedAccount.
+      operationId: Connect_UpdateLinkedAccount
+      parameters:
+      - name: connector
+        in: path
+        description: The connector id.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: linkedaccount
+        in: path
+        description: The linkedaccount id.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: update_mask
+        in: query
+        description: The list of fields to update.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: field-mask
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LinkedAccount'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkedAccount'
+        default:
+          description: Default error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
   /v1/connectors/{connector}/linkedaccounts/{linkedaccount}/logs:
     get:
       tags:
@@ -354,9 +442,17 @@ paths:
         explode: true
         schema:
           type: string
+      - name: order_by
+        in: query
+        description: Order by parameter
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
       - name: filter
         in: query
-        description: "Filter parameter, no filters currently supported"
+        description: Filter parameters
         required: false
         style: form
         explode: true
@@ -369,6 +465,48 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListLinkedAccountLogsResponse'
+        default:
+          description: Default error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+    post:
+      tags:
+      - Connect
+      summary: Create LinkedAccountLog
+      description: Creates a LinkedAccountLog entry using consumer provided information
+      operationId: Connect_CreateLinkedAccountLog
+      parameters:
+      - name: connector
+        in: path
+        description: The connector id.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: linkedaccount
+        in: path
+        description: The linkedaccount id.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LinkedAccountLog'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkedAccountLog'
         default:
           description: Default error response
           content:
@@ -467,6 +605,99 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Status'
+  /v1/connectors/{connector}/links:
+    post:
+      tags:
+      - Connect
+      summary: CreateConnectorLink
+      description: |-
+        Creates and returns a link that can be shared to create a linked account
+         To create a link to the embedded marketplace where the consumer can choose a connector
+         use the wildcard `-` in place of the connector id
+      operationId: Connect_CreateConnectorLink
+      parameters:
+      - name: connector
+        in: path
+        description: The connector id.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectorLink'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectorLink'
+        default:
+          description: Default error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+  /v1/connectors:loadLink:
+    post:
+      tags:
+      - Connect
+      summary: LoadConnectorLink
+      description: Returns the connector link data for the embedded marketplace
+      operationId: Connect_LoadConnectorLink
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoadConnectorLinkRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoadConnectorLinkResponse'
+        default:
+          description: Default error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+  /v1/connectortemplates/{connectortemplate}:
+    get:
+      tags:
+      - Connect
+      summary: Get ConnectorTemplate
+      description: This gets one connector template by ID
+      operationId: Connect_GetConnectorTemplate
+      parameters:
+      - name: connectortemplate
+        in: path
+        description: The connectortemplate id.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectorTemplate'
+        default:
+          description: Default error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
   /v1/consumers:consumerToken:
     post:
       tags:
@@ -531,11 +762,16 @@ components:
           - BASIC_AUTH
           - SESSION
           - JWT
+          - AGENT
           - CUSTOM
         oauth2_config:
           $ref: '#/components/schemas/Connector_Oauth2Config'
         api_key_config:
           $ref: '#/components/schemas/Connector_ApiKeyConfig'
+        basic_auth_config:
+          $ref: '#/components/schemas/Connector_BasicAuthConfig'
+        agent_config:
+          $ref: '#/components/schemas/Connector_AgentConfig'
         create_time:
           type: string
           description: "Timestamps. See: https://aip.kolla.dev/kolla/9001 create time"
@@ -553,6 +789,8 @@ components:
           consumer_config_key: consumer_config_key
           prefix: prefix
           header: true
+        agent_config:
+          proxy_uri: http://example.com/aeiou
         uid: uid
         auth_type: OAUTH2
         update_time: 2000-01-23T04:56:07.000+00:00
@@ -561,9 +799,11 @@ components:
         oauth2_config:
           extra_token_uri_params:
             key: extra_token_uri_params
+          pkce_method: pkce_method
           token_uri: token_uri
           extra_authorization_uri_params:
             key: extra_authorization_uri_params
+          auth_style: auth_style
           authorization_uri: authorization_uri
           revocation_uri: http://example.com/aeiou
           client_secret: client_secret
@@ -581,7 +821,94 @@ components:
           - scopes
           client_id: client_id
         name: name
+        basic_auth_config:
+          consumer_config_username: consumer_config_username
+          consumer_config_password: consumer_config_password
         slug: slug
+    ConnectorLink:
+      required:
+      - consumer_id
+      type: object
+      properties:
+        name:
+          pattern: "^connectors/[a-z2-7]{26}/links/[a-z2-7]{26}$"
+          type: string
+          description: full name of the created linked account link
+        uri:
+          type: string
+          description: uri to share with the consumer to install the connector
+          readOnly: true
+        connector:
+          type: string
+          description: "connector that the link belongs to, added as a separate field\
+            \ for convenience in not having to extract it from the ConnectorLink name"
+          readOnly: true
+        consumer_id:
+          maxLength: 100
+          type: string
+          description: consumer id
+        consumer_metadata:
+          $ref: '#/components/schemas/ConsumerMetadata'
+        create_time:
+          type: string
+          description: "Timestamps. See: https://aip.kolla.dev/kolla/9001 create time"
+          format: date-time
+          readOnly: true
+        expire_time:
+          type: string
+          description: expiration time of the uri
+          format: date-time
+          readOnly: true
+      description: response message
+      example:
+        consumer_id: consumer_id
+        connector: connector
+        create_time: 2000-01-23T04:56:07.000+00:00
+        name: name
+        consumer_metadata:
+          title: title
+          email: email
+        expire_time: 2000-01-23T04:56:07.000+00:00
+        uri: uri
+    ConnectorTemplate:
+      type: object
+      properties:
+        name:
+          pattern: "^connectortemplates/[a-z2-7]{26}$"
+          type: string
+          description: Resource name of the connector
+          readOnly: true
+        uid:
+          type: string
+          description: The system ID of the resource
+          readOnly: true
+        slug:
+          maxLength: 32
+          minLength: 4
+          pattern: "^[a-z90-9\\-\\_]{4,32}$"
+          type: string
+          description: Short name that can be used to identify the connector in place
+            of using the ID
+        manifest:
+          type: object
+          description: The manifest of the connector template
+      description: Connector Template Resource
+      example:
+        uid: uid
+        manifest: {}
+        name: name
+        slug: slug
+    Connector_AgentConfig:
+      type: object
+      properties:
+        proxy_uri:
+          maxLength: 500
+          type: string
+          description: subscriber specific proxy_uri to reach the agent
+          format: uri
+      description: On prem agent configuration
+      example:
+        proxy_uri: http://example.com/aeiou
     Connector_ApiKeyConfig:
       type: object
       properties:
@@ -608,6 +935,23 @@ components:
         consumer_config_key: consumer_config_key
         prefix: prefix
         header: true
+    Connector_BasicAuthConfig:
+      type: object
+      properties:
+        consumer_config_username:
+          maxLength: 50
+          type: string
+          description: "The key from the key-value pair in the consumer config that\
+            \ maps to the username example: consumer_config.username"
+        consumer_config_password:
+          maxLength: 50
+          type: string
+          description: "The key from the key-value pair in the consumer config that\
+            \ maps to the password example: consumer_config.password"
+      description: Basic Auth Config message
+      example:
+        consumer_config_username: consumer_config_username
+        consumer_config_password: consumer_config_password
     Connector_Oauth2Config:
       type: object
       properties:
@@ -655,13 +999,23 @@ components:
           additionalProperties:
             type: string
           description: Extra token_uri parameters
+        pkce_method:
+          type: string
+          description: "PKCE configuration, if set to S256 PKCE will be used during\
+            \ token exchange"
+        auth_style:
+          type: string
+          description: "token exchange/refresh auth style, default is \"params\",\
+            \ options are \"params\", \"header\", or \"detect\""
       description: Oauth2 config message
       example:
         extra_token_uri_params:
           key: extra_token_uri_params
+        pkce_method: pkce_method
         token_uri: token_uri
         extra_authorization_uri_params:
           key: extra_authorization_uri_params
+        auth_style: auth_style
         authorization_uri: authorization_uri
         revocation_uri: http://example.com/aeiou
         client_secret: client_secret
@@ -701,6 +1055,7 @@ components:
       properties:
         consumer_id:
           maxLength: 100
+          minLength: 1
           type: string
           description: "id that links back to the consumer, can be a user_id, tenant_id,\
             \ machine_id, etc"
@@ -736,7 +1091,7 @@ components:
           maxLength: 100
           type: string
           description: "consumer_id, if specified, will ensure that the LinkedAccount\
-            \ is owner by the given consumer if a wildcard '-' is used for the LinkedAccount_id,\
+            \ is owned by the given consumer if a wildcard '-' is used for the LinkedAccount_id,\
             \ this field is required"
       description: Returns the linked account's access token
     CredentialsResponse:
@@ -750,6 +1105,8 @@ components:
       example:
         credentials:
           expiry_time: 2000-01-23T04:56:07.000+00:00
+          secrets:
+            key: secrets
           token: token
         linked_account:
           install_uri: install_uri
@@ -757,6 +1114,7 @@ components:
           credentials:
             key: credentials
           auth_state: UNAVAILABLE
+          expire_time: 2000-01-23T04:56:07.000+00:00
           auth_data: {}
           labels:
             key: labels
@@ -765,6 +1123,9 @@ components:
           consumer_config_values:
             key: consumer_config_values
           update_time: 2000-01-23T04:56:07.000+00:00
+          agent_auth_data:
+            install_token: install_token
+            agent: agent
           auth_state_description: auth_state_description
           name: name
           consumer_metadata:
@@ -788,14 +1149,23 @@ components:
       properties:
         token:
           type: string
-          description: LinkedAccount access token
+          description: "LinkedAccount access token, if available"
         expiry_time:
           type: string
           description: timestamp for when a new token should be requested
           format: date-time
+        secrets:
+          type: object
+          additionalProperties:
+            type: string
+          description: "secret key value pairs, available keys depend on the connector\
+            \ type. Basic auth connectors will have a username and password. OAuth2\
+            \ and most APIKey connectors will not have any secrets"
       description: Message for linked account credentials
       example:
         expiry_time: 2000-01-23T04:56:07.000+00:00
+        secrets:
+          key: secrets
         token: token
     DisableLinkedAccountRequest:
       required:
@@ -863,8 +1233,10 @@ components:
           writeOnly: true
         auth_data:
           type: object
-          description: Additional auth data received from the connected provider during
-            consumer authentication
+          description: "Additional auth data received from the provider during consumer\
+            \ authentication, typically from oauth flows"
+        agent_auth_data:
+          $ref: '#/components/schemas/LinkedAccount_AgentAuthData'
         auth_state:
           type: string
           description: "current state of the embedded credentials, can be used to\
@@ -883,12 +1255,12 @@ components:
           description: A user displayable message about the auth state
           readOnly: true
         linked_account_scopes:
-          maxItems: 100
+          maxItems: 250
           type: array
           description: "Scopes associated with the linked account credentials, only\
             \ needs to be provided if migrating credentials into Kolla"
           items:
-            maxLength: 100
+            maxLength: 250
             type: string
         labels:
           type: object
@@ -910,6 +1282,12 @@ components:
           description: time of last update
           format: date-time
           readOnly: true
+        expire_time:
+          type: string
+          description: "expiration time of the linked account, active linked accounts\
+            \ don't expire, expired linked accounts will be deleted soon after expiration"
+          format: date-time
+          readOnly: true
       description: LinkedAccount to a connector
       example:
         install_uri: install_uri
@@ -917,6 +1295,7 @@ components:
         credentials:
           key: credentials
         auth_state: UNAVAILABLE
+        expire_time: 2000-01-23T04:56:07.000+00:00
         auth_data: {}
         labels:
           key: labels
@@ -925,6 +1304,9 @@ components:
         consumer_config_values:
           key: consumer_config_values
         update_time: 2000-01-23T04:56:07.000+00:00
+        agent_auth_data:
+          install_token: install_token
+          agent: agent
         auth_state_description: auth_state_description
         name: name
         consumer_metadata:
@@ -944,6 +1326,9 @@ components:
         - linked_account_scopes
         - linked_account_scopes
     LinkedAccountLog:
+      required:
+      - action
+      - level
       type: object
       properties:
         name:
@@ -958,10 +1343,15 @@ components:
         request_id:
           type: string
           description: request id of the request that generated this log
+          readOnly: true
         action:
+          maxLength: 100
           type: string
-          description: action that triggered the workflow that generated the log message
+          description: "action that triggered the workflow that generated the log\
+            \ message this should not be free-form text, it should be one of a small\
+            \ set of values that can be used to filter logs"
         code:
+          maxLength: 100
           type: string
           description: code associated with the log message
         level:
@@ -971,7 +1361,16 @@ components:
           enum:
           - INFO
           - ERROR
+        error_class:
+          type: string
+          description: Error class associated with the log message
+          format: enum
+          enum:
+          - ERROR_CLASS_TEMPORARY
+          - ERROR_CLASS_CONFIG
+          - ERROR_CLASS_PERMANENT
         message:
+          maxLength: 300
           type: string
           description: The log message
         state:
@@ -979,6 +1378,7 @@ components:
           description: capture the current linkedaccount state in the log messages?
             linked account state
           format: enum
+          readOnly: true
           enum:
           - INITIALIZED
           - ACTIVE
@@ -988,11 +1388,20 @@ components:
           type: string
           description: linked account auth state
           format: enum
+          readOnly: true
           enum:
           - UNAVAILABLE
           - VALID
           - REAUTH_REQUIRED
           - INVALID
+        consumer_id:
+          type: string
+          description: consumer id
+          readOnly: true
+        consumer_title:
+          type: string
+          description: consumer title
+          readOnly: true
         create_time:
           type: string
           description: The log timestamp
@@ -1005,17 +1414,38 @@ components:
           readOnly: true
       description: LinkedAccountLogs
       example:
-        uid: uid
-        update_time: 2000-01-23T04:56:07.000+00:00
         code: code
         create_time: 2000-01-23T04:56:07.000+00:00
         level: INFO
-        name: name
         auth_state: UNAVAILABLE
+        consumer_title: consumer_title
+        message: message
+        uid: uid
+        consumer_id: consumer_id
+        error_class: ERROR_CLASS_TEMPORARY
+        update_time: 2000-01-23T04:56:07.000+00:00
+        name: name
         action: action
         state: INITIALIZED
-        message: message
         request_id: request_id
+    LinkedAccount_AgentAuthData:
+      required:
+      - install_token
+      type: object
+      properties:
+        install_token:
+          type: string
+          description: agent install token used to linked back to the agent running
+            on the customer's infrastructure
+          writeOnly: true
+        agent:
+          type: string
+          description: agent name
+          readOnly: true
+      description: Agent auth data is set when the connector type is AGENT
+      example:
+        install_token: install_token
+        agent: agent
     ListConnectorsResponse:
       type: object
       properties:
@@ -1036,6 +1466,8 @@ components:
             consumer_config_key: consumer_config_key
             prefix: prefix
             header: true
+          agent_config:
+            proxy_uri: http://example.com/aeiou
           uid: uid
           auth_type: OAUTH2
           update_time: 2000-01-23T04:56:07.000+00:00
@@ -1044,9 +1476,11 @@ components:
           oauth2_config:
             extra_token_uri_params:
               key: extra_token_uri_params
+            pkce_method: pkce_method
             token_uri: token_uri
             extra_authorization_uri_params:
               key: extra_authorization_uri_params
+            auth_style: auth_style
             authorization_uri: authorization_uri
             revocation_uri: http://example.com/aeiou
             client_secret: client_secret
@@ -1064,12 +1498,17 @@ components:
             - scopes
             client_id: client_id
           name: name
+          basic_auth_config:
+            consumer_config_username: consumer_config_username
+            consumer_config_password: consumer_config_password
           slug: slug
         - api_key_config:
             parameter_field: parameter_field
             consumer_config_key: consumer_config_key
             prefix: prefix
             header: true
+          agent_config:
+            proxy_uri: http://example.com/aeiou
           uid: uid
           auth_type: OAUTH2
           update_time: 2000-01-23T04:56:07.000+00:00
@@ -1078,9 +1517,11 @@ components:
           oauth2_config:
             extra_token_uri_params:
               key: extra_token_uri_params
+            pkce_method: pkce_method
             token_uri: token_uri
             extra_authorization_uri_params:
               key: extra_authorization_uri_params
+            auth_style: auth_style
             authorization_uri: authorization_uri
             revocation_uri: http://example.com/aeiou
             client_secret: client_secret
@@ -1098,6 +1539,9 @@ components:
             - scopes
             client_id: client_id
           name: name
+          basic_auth_config:
+            consumer_config_username: consumer_config_username
+            consumer_config_password: consumer_config_password
           slug: slug
         next_page_token: next_page_token
     ListLinkedAccountLogsResponse:
@@ -1116,27 +1560,33 @@ components:
       example:
         next_page_token: next_page_token
         linked_account_logs:
-        - uid: uid
-          update_time: 2000-01-23T04:56:07.000+00:00
-          code: code
+        - code: code
           create_time: 2000-01-23T04:56:07.000+00:00
           level: INFO
-          name: name
           auth_state: UNAVAILABLE
+          consumer_title: consumer_title
+          message: message
+          uid: uid
+          consumer_id: consumer_id
+          error_class: ERROR_CLASS_TEMPORARY
+          update_time: 2000-01-23T04:56:07.000+00:00
+          name: name
           action: action
           state: INITIALIZED
-          message: message
           request_id: request_id
-        - uid: uid
-          update_time: 2000-01-23T04:56:07.000+00:00
-          code: code
+        - code: code
           create_time: 2000-01-23T04:56:07.000+00:00
           level: INFO
-          name: name
           auth_state: UNAVAILABLE
+          consumer_title: consumer_title
+          message: message
+          uid: uid
+          consumer_id: consumer_id
+          error_class: ERROR_CLASS_TEMPORARY
+          update_time: 2000-01-23T04:56:07.000+00:00
+          name: name
           action: action
           state: INITIALIZED
-          message: message
           request_id: request_id
     ListLinkedAccountsResponse:
       type: object
@@ -1159,6 +1609,7 @@ components:
           credentials:
             key: credentials
           auth_state: UNAVAILABLE
+          expire_time: 2000-01-23T04:56:07.000+00:00
           auth_data: {}
           labels:
             key: labels
@@ -1167,6 +1618,9 @@ components:
           consumer_config_values:
             key: consumer_config_values
           update_time: 2000-01-23T04:56:07.000+00:00
+          agent_auth_data:
+            install_token: install_token
+            agent: agent
           auth_state_description: auth_state_description
           name: name
           consumer_metadata:
@@ -1190,6 +1644,7 @@ components:
           credentials:
             key: credentials
           auth_state: UNAVAILABLE
+          expire_time: 2000-01-23T04:56:07.000+00:00
           auth_data: {}
           labels:
             key: labels
@@ -1198,6 +1653,9 @@ components:
           consumer_config_values:
             key: consumer_config_values
           update_time: 2000-01-23T04:56:07.000+00:00
+          agent_auth_data:
+            install_token: install_token
+            agent: agent
           auth_state_description: auth_state_description
           name: name
           consumer_metadata:
@@ -1216,6 +1674,39 @@ components:
           - linked_account_scopes
           - linked_account_scopes
           - linked_account_scopes
+    LoadConnectorLinkRequest:
+      required:
+      - connector_link_id
+      type: object
+      properties:
+        connector_link_id:
+          maxLength: 100
+          minLength: 1
+          type: string
+          description: "connector link id, not the full name"
+      description: Request for a connector link
+    LoadConnectorLinkResponse:
+      type: object
+      properties:
+        connector_link:
+          $ref: '#/components/schemas/ConnectorLink'
+        consumer_token:
+          type: string
+          description: consumer token for accessing Kolla API's as a consumer
+      description: Data to be used in the embedded marketplace to present the consumer
+        with a UI to link a connector
+      example:
+        consumer_token: consumer_token
+        connector_link:
+          consumer_id: consumer_id
+          connector: connector
+          create_time: 2000-01-23T04:56:07.000+00:00
+          name: name
+          consumer_metadata:
+            title: title
+            email: email
+          expire_time: 2000-01-23T04:56:07.000+00:00
+          uri: uri
     Status:
       type: object
       properties:

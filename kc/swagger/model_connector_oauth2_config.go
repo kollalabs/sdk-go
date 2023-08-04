@@ -28,4 +28,8 @@ type ConnectorOauth2Config struct {
 	ExtraAuthorizationUriParams map[string]string `json:"extra_authorization_uri_params,omitempty"`
 	// Extra token_uri parameters
 	ExtraTokenUriParams map[string]string `json:"extra_token_uri_params,omitempty"`
+	// PKCE configuration, if set to S256 PKCE will be used during token exchange
+	PkceMethod string `json:"pkce_method,omitempty"`
+	// token exchange/refresh auth style, default is \"params\", options are \"params\", \"header\", or \"detect\"
+	AuthStyle string `json:"auth_style,omitempty"`
 }

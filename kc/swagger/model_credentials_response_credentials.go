@@ -14,8 +14,10 @@ import (
 
 // Message for linked account credentials
 type CredentialsResponseCredentials struct {
-	// LinkedAccount access token
+	// LinkedAccount access token, if available
 	Token string `json:"token,omitempty"`
 	// timestamp for when a new token should be requested
 	ExpiryTime time.Time `json:"expiry_time,omitempty"`
+	// secret key value pairs, available keys depend on the connector type. Basic auth connectors will have a username and password. OAuth2 and most APIKey connectors will not have any secrets
+	Secrets map[string]string `json:"secrets,omitempty"`
 }
