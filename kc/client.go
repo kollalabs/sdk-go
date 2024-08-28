@@ -6,6 +6,7 @@ import (
 	"runtime/debug"
 
 	"github.com/kollalabs/sdk-go/kc/swagger"
+	"golang.org/x/oauth2"
 )
 
 const baseURL = "https://api.getkolla.com/connect"
@@ -111,6 +112,41 @@ func (c *Client) Credentials(ctx context.Context, connectorID string, consumerID
 	}
 
 	return creds, nil
+}
+
+type tokenSource struct {
+	connectorID string
+	consumerID  string
+
+	*Credentials
+}
+
+func (t *tokenSource) Token() (*oauth2.Token, error) {
+	if t.Credentials == nil {
+		return nil, fmt.Errorf("no credentials found")
+	}
+
+	return &oauth2.Token{
+		AccessToken: t.Credentials.Token,
+		Expiry:      t.Credentials.ExpiryTime,
+	}, nil
+}
+
+func (c *Client) CredentialsOAuth2TokenSource(ctx context.Context, connectorID string, consumerID string) (oauth2.TokenSource, error) {
+
+	// fetch the credentials
+	creds, err := c.Credentials(ctx, connectorID, consumerID)
+	if err != nil {
+		return nil, err
+	}
+
+	t := &tokenSource{
+		connectorID: connectorID,
+		consumerID:  consumerID,
+		Credentials: creds,
+	}
+
+	return t, nil
 }
 
 func setUserAgent() string {
