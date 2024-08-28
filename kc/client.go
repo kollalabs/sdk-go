@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"runtime/debug"
+	"time"
 
 	"github.com/kollalabs/sdk-go/kc/swagger"
 	"golang.org/x/oauth2"
@@ -119,31 +120,35 @@ type tokenSource struct {
 	consumerID  string
 
 	credentials *Credentials
+	kc          *Client
 }
 
 func (t *tokenSource) Token() (*oauth2.Token, error) {
-	if t.credentials == nil {
-		return nil, fmt.Errorf("no credentials found")
+	if t.kc == nil || t.connectorID == "" || t.consumerID == "" {
+		return nil, fmt.Errorf("token source not configured")
+	}
+
+	if t.credentials.ExpiryTime.Before(time.Now().Add(-time.Second * 10)) {
+		// fetch the credentials
+		creds, err := t.kc.Credentials(context.Background(), t.connectorID, t.consumerID)
+		if err != nil {
+			return nil, err
+		}
+		t.credentials = creds
 	}
 
 	return &oauth2.Token{
 		AccessToken: t.credentials.Token,
 		Expiry:      t.credentials.ExpiryTime,
 	}, nil
+
 }
 
 func (c *Client) CredentialsOAuth2TokenSource(ctx context.Context, connectorID string, consumerID string) (oauth2.TokenSource, error) {
 
-	// fetch the credentials
-	creds, err := c.Credentials(ctx, connectorID, consumerID)
-	if err != nil {
-		return nil, err
-	}
-
 	t := &tokenSource{
 		connectorID: connectorID,
 		consumerID:  consumerID,
-		credentials: creds,
 	}
 
 	return t, nil
