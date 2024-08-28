@@ -118,17 +118,17 @@ type tokenSource struct {
 	connectorID string
 	consumerID  string
 
-	*Credentials
+	credentials *Credentials
 }
 
 func (t *tokenSource) Token() (*oauth2.Token, error) {
-	if t.Credentials == nil {
+	if t.credentials == nil {
 		return nil, fmt.Errorf("no credentials found")
 	}
 
 	return &oauth2.Token{
-		AccessToken: t.Credentials.Token,
-		Expiry:      t.Credentials.ExpiryTime,
+		AccessToken: t.credentials.Token,
+		Expiry:      t.credentials.ExpiryTime,
 	}, nil
 }
 
@@ -143,7 +143,7 @@ func (c *Client) CredentialsOAuth2TokenSource(ctx context.Context, connectorID s
 	t := &tokenSource{
 		connectorID: connectorID,
 		consumerID:  consumerID,
-		Credentials: creds,
+		credentials: creds,
 	}
 
 	return t, nil
