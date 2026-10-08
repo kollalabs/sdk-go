@@ -19,8 +19,8 @@ jobs:
     name: Go build, test, vet
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
         name: Set up Go
         with:
           go-version: ${{ matrix.go-version }}
